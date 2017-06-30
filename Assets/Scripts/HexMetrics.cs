@@ -24,6 +24,11 @@ public static class HexMetrics {
 		new Vector3 (-innerRadius, 0f, 0.5f * outterRadius)
 	};
 
+	public static Texture2D noiseSource;
+	public const float noiseScale = 0.003f;
+	public const float cellPerturbStrength = 5f;
+	public const float elevationPerturbStrenght = 1.5f;
+
 	public static Vector3 GetFirstCorner (HexDirection direction) {
 		return corners [(int)direction];
 	}
@@ -65,6 +70,12 @@ public static class HexMetrics {
 			return HexEdgeType.Slope;
 		else
 			return HexEdgeType.Cliff;
+	}
+
+	public static Vector4 SampleNoise (Vector3 position) {
+		return noiseSource.GetPixelBilinear (
+			position.x * noiseScale,
+			position.z * noiseScale);
 	}
 }
 
