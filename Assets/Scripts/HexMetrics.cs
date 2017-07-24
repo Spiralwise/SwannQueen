@@ -5,7 +5,7 @@ public static class HexMetrics {
 	// Hexagon metrics
 	public const float outterRadius = 10.0f;
 	public const float innerRadius = outterRadius * 0.866025404f;
-	public const float solidFactor = 0.75f;
+	public const float solidFactor = 0.8f;
 	public const float blendFactor = 1f - solidFactor;
 
 	// Elevation metrics
@@ -26,7 +26,7 @@ public static class HexMetrics {
 
 	public static Texture2D noiseSource;
 	public const float noiseScale = 0.003f;
-	public const float cellPerturbStrength = 5f;
+	public const float cellPerturbStrength = 4f;
 	public const float elevationPerturbStrenght = 1.5f;
 
 	public static Vector3 GetFirstCorner (HexDirection direction) {
