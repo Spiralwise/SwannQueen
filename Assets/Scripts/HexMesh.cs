@@ -259,6 +259,7 @@ public class HexMesh : MonoBehaviour {
 		if (leftCell.GetEdgeType (rightCell) == HexEdgeType.Slope)
 			TriangulateBoundaryTriangle (left, leftCell, right, rightCell, boundary, boundaryColor);
 		else {
+			AddTriangleUnperturbed (Perturb (left), Perturb (right), boundary);
 			AddTriangleColor (leftCell.color, rightCell.color, boundaryColor);
 		}
 	}
@@ -273,6 +274,7 @@ public class HexMesh : MonoBehaviour {
 		if (leftCell.GetEdgeType (rightCell) == HexEdgeType.Slope)
 			TriangulateBoundaryTriangle (left, leftCell, right, rightCell, boundary, boundaryColor);
 		else {
+			AddTriangleUnperturbed (Perturb (left), Perturb (right), boundary);
 			AddTriangleColor (leftCell.color, rightCell.color, boundaryColor);
 		}
 	}
@@ -289,6 +291,7 @@ public class HexMesh : MonoBehaviour {
 			c2 = HexMetrics.TerraceLerp (beginCell.color, leftCell.color, i);
 			HexMetrics.TerraceLerp (begin, left, i);
 			HexMetrics.TerraceLerp (beginCell.color, leftCell.color, i);
+			AddTriangleUnperturbed (v1, v2, boundary);
 			AddTriangleColor (c1, c2, boundaryColor);
 		}
 		AddTriangleUnperturbed (v2, Perturb (left), boundary);
