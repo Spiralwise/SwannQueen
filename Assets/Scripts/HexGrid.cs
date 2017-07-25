@@ -5,37 +5,59 @@ using UnityEngine.UI;
 
 public class HexGrid : MonoBehaviour {
 
-	public int width = 6;
-	public int height = 6;
-
+	public int chunkCountX = 4;
+	public int chunkCountY = 3;
 	public HexCell hexPrefab;
+	public HexGridChunk chunkPrefab;
 	public Color defaultColor = Color.white;
 	public Color touchedColor = Color.magenta;
 	public Texture2D noiseSource;
 
 	public Text hexLabelPrefab;
 
+	int cellCountX, cellCountY;
 	HexCell[] cells;
-	Canvas canvas;
-	HexMesh mesh;
+	HexGridChunk[] chunks;
 
 	public void Awake () {
 		HexMetrics.noiseSource = noiseSource;
-		canvas = GetComponentInChildren<Canvas> ();
-		mesh = GetComponentInChildren<HexMesh> ();
-		int i = 0;
-		cells = new HexCell[height * width];
-		for (int y = 0; y < height; y++)
-			for (int x = 0; x < width; x++)
-				CreateCell (x, y, i++);
-	}
 
-	public void Start () {
-		mesh.Triangulate (cells);
+		cellCountX = chunkCountX * HexMetrics.chunkSizeX;
+		cellCountY = chunkCountY * HexMetrics.chunkSizeY;
+
+		CreateChunks ();
+		CreateCells ();
 	}
 
 	void OnEnable () {
 		HexMetrics.noiseSource = noiseSource;
+	}
+
+	void CreateChunks () {
+		chunks = new HexGridChunk[chunkCountX * chunkCountY];
+		for (int y = 0, i = 0; y < chunkCountY; y++)
+			for (int x = 0; x < chunkCountX; x++) {
+				HexGridChunk chunk = chunks [i++] = Instantiate (chunkPrefab);
+				chunk.transform.SetParent (transform);
+			}
+	}
+
+	void AddCellToChunk (int x, int y, HexCell cell) {
+		int chunkX = x / HexMetrics.chunkSizeX;
+		int chunkY = y / HexMetrics.chunkSizeY;
+		HexGridChunk chunk = chunks [chunkX + chunkY * chunkCountX];
+
+		int localX = x - chunkX * HexMetrics.chunkSizeX;
+		int localY = y - chunkY * HexMetrics.chunkSizeY;
+		chunk.AddCell (localX + localY * HexMetrics.chunkSizeX, cell);
+	}
+
+	void CreateCells () {
+		int i = 0;
+		cells = new HexCell[cellCountY * cellCountX];
+		for (int y = 0; y < cellCountY; y++)
+			for (int x = 0; x < cellCountX; x++)
+				CreateCell (x, y, i++);
 	}
 
 	void CreateCell (int x, int y, int i) {
@@ -45,42 +67,38 @@ public class HexGrid : MonoBehaviour {
 		position.z = y * 1.5f * HexMetrics.outterRadius;
 		HexCell localCell = cells[i] = Instantiate<HexCell> (hexPrefab);
 		localCell.coordinates = HexCoordinates.FromOffsetCoordinates (x, y);
-		localCell.transform.SetParent (transform, false);
 		localCell.transform.position = position;
-		localCell.color = defaultColor;
+		localCell.Color = defaultColor;
 
 		Text localLabel = Instantiate<Text> (hexLabelPrefab);
-		localLabel.rectTransform.SetParent (canvas.transform, false);
 		localLabel.rectTransform.anchoredPosition = new Vector2 (position.x, position.z);
 		localLabel.text = localCell.coordinates.ToStringOnSeparateLines ();
 
 		if (x > 0)
-			localCell.SetNeighbor (HexDirection.W, cells [x - 1 + y * width]);
+			localCell.SetNeighbor (HexDirection.W, cells [x - 1 + y * cellCountX]);
 		if (y > 0) {
 			if ((y % 2) == 1) {
-				localCell.SetNeighbor (HexDirection.SW, cells [x + (y - 1) * width]);
-				if (x < width - 1)
-					localCell.SetNeighbor (HexDirection.SE, cells [x + 1 + (y - 1) * width]);
+				localCell.SetNeighbor (HexDirection.SW, cells [x + (y - 1) * cellCountX]);
+				if (x < cellCountX - 1)
+					localCell.SetNeighbor (HexDirection.SE, cells [x + 1 + (y - 1) * cellCountX]);
 			} else {
-				localCell.SetNeighbor (HexDirection.SE, cells [x + (y - 1) * width]);
+				localCell.SetNeighbor (HexDirection.SE, cells [x + (y - 1) * cellCountX]);
 				if (x > 0)
-					localCell.SetNeighbor (HexDirection.SW, cells [x - 1 + (y - 1) * width]);
+					localCell.SetNeighbor (HexDirection.SW, cells [x - 1 + (y - 1) * cellCountX]);
 			}
 		}
 
 		localCell.uiRect = localLabel.rectTransform;
 		localCell.Elevation = 0;
+
+		AddCellToChunk (x, y, localCell);
 	}
 
 	public HexCell GetCell (Vector3 position) {
 		position = transform.InverseTransformPoint (position);
 		HexCoordinates targetCoordinates = HexCoordinates.FromPosition (position);
-		int index = targetCoordinates.X + targetCoordinates.Y / 2 + targetCoordinates.Y * width;
+		int index = targetCoordinates.X + targetCoordinates.Y / 2 + targetCoordinates.Y * cellCountX;
 		return cells[index];
 		//Debug.Log ("touched at " + targetCoordinates.toString ());
-	}
-
-	public void Refresh () {
-		mesh.Triangulate (cells);
 	}
 }

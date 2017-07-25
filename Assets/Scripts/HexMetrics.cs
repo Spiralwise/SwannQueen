@@ -2,6 +2,10 @@
 
 public static class HexMetrics {
 
+	// Mesh metrics
+	public const int chunkSizeX = 5;
+	public const int chunkSizeY = 5;
+
 	// Hexagon metrics
 	public const float outterRadius = 10.0f;
 	public const float innerRadius = outterRadius * 0.866025404f;
