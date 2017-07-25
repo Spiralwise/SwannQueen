@@ -9,7 +9,9 @@ public class HexMapEditor : MonoBehaviour {
 	public HexGrid grid;
 
 	Color activeColor;
+	bool applyColor;
 	int activeElevation;
+	bool applyElevation = true;
 
 	void Awake () {
 		SelectColor (0);
@@ -29,15 +31,23 @@ public class HexMapEditor : MonoBehaviour {
 	}
 
 	public void SelectColor (int index) {
-		activeColor = colors [index];
+		applyColor = index >= 0;
+		if (applyColor)
+			activeColor = colors [index];
 	}
 
 	public void SetElevation (float elevation) {
 		activeElevation = (int)elevation;
 	}
 
+	public void SetApplyElevation (bool toggle) {
+		applyElevation = toggle;
+	}
+
 	void EditCell (HexCell cell) {
-		cell.Color = activeColor;
-		cell.Elevation = activeElevation;
+		if (applyColor)
+			cell.Color = activeColor;
+		if (applyElevation)
+			cell.Elevation = activeElevation;
 	}
 }
