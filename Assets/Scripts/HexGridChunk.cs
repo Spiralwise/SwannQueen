@@ -13,6 +13,7 @@ public class HexGridChunk : MonoBehaviour {
 		mesh = GetComponentInChildren<HexMesh> ();
 
 		cells = new HexCell[HexMetrics.chunkSizeX * HexMetrics.chunkSizeY];
+		ShowUI (false);
 	}
 
 	public void AddCell (int index, HexCell cell) {
@@ -24,6 +25,10 @@ public class HexGridChunk : MonoBehaviour {
 
 	public void Refresh () {
 		enabled = true;
+	}
+
+	public void ShowUI (bool visible) {
+		canvas.gameObject.SetActive (visible);
 	}
 
 	void LateUpdate () {

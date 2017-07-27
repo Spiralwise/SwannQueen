@@ -101,4 +101,19 @@ public class HexGrid : MonoBehaviour {
 		return cells[index];
 		//Debug.Log ("touched at " + targetCoordinates.toString ());
 	}
+
+	public HexCell GetCell (HexCoordinates coordinates) {
+		int y = coordinates.Y;
+		if (y < 0 || y >= cellCountY)
+			return null;
+		int x = coordinates.X + y / 2;
+		if (x < 0 || x >= cellCountX)
+			return null;
+		return cells [x + y * cellCountX];
+	}
+
+	public void ShowUI (bool visible) {
+		for (int i = 0; i < chunks.Length; i++)
+			chunks [i].ShowUI (visible);
+	}
 }
