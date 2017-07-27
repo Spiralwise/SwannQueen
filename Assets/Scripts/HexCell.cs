@@ -95,6 +95,12 @@ public class HexCell : MonoBehaviour {
 		}
 	}
 
+	public float StreamBedY {
+		get {
+			return (elevation + HexMetrics.streamBedElevationOffset) * HexMetrics.elevationStep;
+		}
+	}
+
 	public HexCell GetNeighbor (HexDirection direction) {
 		return neighbors [(int)direction];
 	}

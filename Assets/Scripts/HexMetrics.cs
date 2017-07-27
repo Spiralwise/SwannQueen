@@ -18,6 +18,7 @@ public static class HexMetrics {
 	public const int terraceSteps = terracesPerSlope * 2 + 1;
 	public const float horizontalTerraceStepSize = 1f / terraceSteps;
 	public const float verticalTerraceStepSize = 1f / (terracesPerSlope + 1);
+	public const float streamBedElevationOffset = -1f;
 
 	static Vector3[] corners = {
 		new Vector3 (0f, 0f, outterRadius),
@@ -28,6 +29,7 @@ public static class HexMetrics {
 		new Vector3 (-innerRadius, 0f, 0.5f * outterRadius)
 	};
 
+	// Vertex perturbation
 	public static Texture2D noiseSource;
 	public const float noiseScale = 0.003f;
 	public const float cellPerturbStrength = 4f;
