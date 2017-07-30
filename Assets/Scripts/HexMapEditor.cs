@@ -11,6 +11,7 @@ public class HexMapEditor : MonoBehaviour {
 	bool isDrag;
 	HexDirection dragDirection;
 	HexCell previousCell;
+	HexCell antePreviousCell;
 
 	Color activeColor;
 	bool applyColor;
@@ -23,16 +24,19 @@ public class HexMapEditor : MonoBehaviour {
 	}
 
 	OptionalToggle riverMode;
+	OptionalToggle roadMode;
 
 	void Awake () {
-		SelectColor (0);
+		SelectColor (-1);
 	}
 
 	void Update () {
 		if (Input.GetMouseButton (1) && !EventSystem.current.IsPointerOverGameObject ())
 			HandleInput ();
-		else
+		else {
 			previousCell = null;
+			antePreviousCell = null;
+		}
 	}
 
 	void HandleInput () {
@@ -40,14 +44,18 @@ public class HexMapEditor : MonoBehaviour {
 		RaycastHit hit;
 		if (Physics.Raycast (inputRay, out hit)) {
 			HexCell currentCell = grid.GetCell (hit.point);
-			if (previousCell && previousCell != currentCell)
+			if (previousCell && previousCell != currentCell 
+				&& (!antePreviousCell || antePreviousCell != currentCell))
 				ValidateDrag (currentCell);
 			else
 				isDrag = false;
 			EditCells (currentCell);
+			antePreviousCell = previousCell;
 			previousCell = currentCell;
-		} else
+		} else {
 			previousCell = null;
+			antePreviousCell = null;
+		}
 	}
 
 	public void SelectColor (int index) {
@@ -68,6 +76,10 @@ public class HexMapEditor : MonoBehaviour {
 		riverMode = (OptionalToggle)mode;
 	}
 
+	public void SetRoadMode (int mode) {
+		roadMode = (OptionalToggle)mode;
+	}
+
 	public void SetBrushSize (float size) {
 		brushSize = (int)size;
 	}
@@ -80,15 +92,25 @@ public class HexMapEditor : MonoBehaviour {
 		if (cell) {
 			if (applyColor)
 				cell.Color = activeColor;
+		
 			if (applyElevation)
 				cell.Elevation = activeElevation;
-		}
-		if (riverMode == OptionalToggle.No)
-			cell.RemoveRiver ();
-		else if (isDrag && riverMode == OptionalToggle.Yes) {
-			HexCell that = cell.GetNeighbor (dragDirection.Opposite ());
-			if (that)
-				that.SetOutgoingRiver (dragDirection);
+		
+			if (riverMode == OptionalToggle.No)
+				cell.RemoveRiver ();
+
+			if (roadMode == OptionalToggle.No)
+				cell.RemoveRoads ();
+			
+			if (isDrag) {
+				HexCell that = cell.GetNeighbor (dragDirection.Opposite ());
+				if (that) {
+					if (riverMode == OptionalToggle.Yes)
+						that.SetOutgoingRiver (dragDirection);
+					if (roadMode == OptionalToggle.Yes)
+						that.AddRoad (dragDirection);
+				}
+			}
 		}
 	}
 
