@@ -55,6 +55,7 @@
      <Compile Include="Assets\Scripts\HexMesh.cs" />
      <Compile Include="Assets\Scripts\HexMetrics.cs" />
      <None Include="Assets\Scripts\HexShader.shader" />
+     <None Include="Assets\Scripts\RiverShader.shader" />
  <Reference Include="UnityEngine.UI">
  <HintPath>D:/dev/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>

@@ -48,6 +48,7 @@
   <ItemGroup>
      <Compile Include="Assets\Scripts\Editor\HexCoordinateDrawer.cs" />
      <None Include="Assets\Scripts\HexShader.shader" />
+     <None Include="Assets\Scripts\RiverShader.shader" />
  <Reference Include="UnityEditor.Advertisements">
  <HintPath>D:/dev/Unity/Editor/Data/UnityExtensions/Unity/Advertisements/Editor/UnityEditor.Advertisements.dll</HintPath>
  </Reference>
@@ -111,6 +112,10 @@
  <Reference Include="UnityEditor.OSXStandalone.Extensions">
  <HintPath>D:/dev/Unity/Editor/Data/PlaybackEngines/MacStandaloneSupport/UnityEditor.OSXStandalone.Extensions.dll</HintPath>
  </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="Assembly-CSharp.csproj">
+      <Project>{8834FFCF-084E-9475-FC12-B952B60A3C80}</Project>      <Name>Assembly-CSharp</Name>    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
