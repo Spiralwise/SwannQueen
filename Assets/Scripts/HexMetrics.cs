@@ -21,7 +21,8 @@ public static class HexMetrics {
 	public const float horizontalTerraceStepSize = 1f / terraceSteps;
 	public const float verticalTerraceStepSize = 1f / (terracesPerSlope + 1);
 	public const float streamBedElevationOffset = -1.75f;
-	public const float riverSurfaceElevationOffset = -0.5f;
+	//public const float riverSurfaceElevationOffset = -0.5f;
+	public const float waterElevationOffset = -0.5f;
 
 	static Vector3[] corners = {
 		new Vector3 (0f, 0f, outterRadius),
