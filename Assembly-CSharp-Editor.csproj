@@ -47,10 +47,12 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\Editor\HexCoordinateDrawer.cs" />
-     <None Include="Assets\Scripts\RoadShader.shader" />
-     <None Include="Assets\Scripts\WaterShader.shader" />
-     <None Include="Assets\Scripts\HexShader.shader" />
-     <None Include="Assets\Scripts\RiverShader.shader" />
+     <None Include="Assets\Shaders\RoadShader.shader" />
+     <None Include="Assets\Shaders\WaterShader.shader" />
+     <None Include="Assets\Shaders\HexShader.cginc" />
+     <None Include="Assets\Shaders\HexShader.shader" />
+     <None Include="Assets\Shaders\WaterShoreShader.shader" />
+     <None Include="Assets\Shaders\RiverShader.shader" />
  <Reference Include="UnityEditor.Advertisements">
  <HintPath>D:/dev/Unity/Editor/Data/UnityExtensions/Unity/Advertisements/Editor/UnityEditor.Advertisements.dll</HintPath>
  </Reference>

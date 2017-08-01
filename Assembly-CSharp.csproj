@@ -54,10 +54,12 @@
      <Compile Include="Assets\Scripts\HexMapEditor.cs" />
      <Compile Include="Assets\Scripts\HexMesh.cs" />
      <Compile Include="Assets\Scripts\HexMetrics.cs" />
-     <None Include="Assets\Scripts\RoadShader.shader" />
-     <None Include="Assets\Scripts\WaterShader.shader" />
-     <None Include="Assets\Scripts\HexShader.shader" />
-     <None Include="Assets\Scripts\RiverShader.shader" />
+     <None Include="Assets\Shaders\RoadShader.shader" />
+     <None Include="Assets\Shaders\WaterShader.shader" />
+     <None Include="Assets\Shaders\HexShader.cginc" />
+     <None Include="Assets\Shaders\HexShader.shader" />
+     <None Include="Assets\Shaders\WaterShoreShader.shader" />
+     <None Include="Assets\Shaders\RiverShader.shader" />
  <Reference Include="UnityEngine.UI">
  <HintPath>D:/dev/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>

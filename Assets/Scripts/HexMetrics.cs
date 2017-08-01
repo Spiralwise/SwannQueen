@@ -12,7 +12,9 @@ public static class HexMetrics {
 	public const float outterRadius = 10.0f;
 	public const float innerRadius = outterRadius * outerToInner;
 	public const float solidFactor = 0.8f;
+	public const float waterFactor = 0.6f;
 	public const float blendFactor = 1f - solidFactor;
+	public const float waterBlendFactor = 1f - waterFactor;
 
 	// Elevation metrics
 	public const float elevationStep = 3f;
@@ -55,12 +57,24 @@ public static class HexMetrics {
 		return corners [((int)direction + 1) % corners.Length] * solidFactor;
 	}
 
+	public static Vector3 GetFirstWaterCorner (HexDirection direction) {
+		return corners [(int)direction] * waterFactor;
+	}
+
+	public static Vector3 GetSecondWaterCorner (HexDirection direction) {
+		return corners [((int)direction + 1) % corners.Length] * waterFactor;
+	}
+
 	public static Vector3 GetSolidEdgeMiddle (HexDirection direction) {
-		return (corners [(int)direction] + corners [((int)direction + 1) % 6]) * (0.5f * solidFactor);
+		return (corners [(int)direction] + corners [((int)direction + 1) % corners.Length]) * (0.5f * solidFactor);
 	}
 
 	public static Vector3 GetBridge (HexDirection direction) {
-		return (corners [((int)direction) % 6] + corners [(((int)direction + 1) % 6) % corners.Length]) * blendFactor;
+		return (corners [((int)direction) % 6] + corners [(((int)direction + 1) % corners.Length)]) * blendFactor;
+	}
+
+	public static Vector3 GetWaterBridge (HexDirection direction) {
+		return (corners [(int)direction] + corners [((int)direction + 1) % corners.Length]) * waterBlendFactor;
 	}
 
 	public static Vector3 TerraceLerp (Vector3 a, Vector3 b, int step) {
