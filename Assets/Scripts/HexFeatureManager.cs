@@ -4,7 +4,7 @@ public class HexFeatureManager : MonoBehaviour {
 
 	public HexFeatureCollection[] urbanCollections, farmCollections, plantCollections;
 	public HexMesh walls;
-	public Transform wallTower;
+	public Transform wallTower, bridge;
 
 	Transform container;
 
@@ -185,6 +185,18 @@ public class HexFeatureManager : MonoBehaviour {
 		walls.AddQuadUnperturbed (v1, point, v3, pointTop);
 		walls.AddQuadUnperturbed (point, v2, pointTop, v4);
 		walls.AddTriangleUnperturbed (pointTop, v3, v4);
+	}
+
+	public void AddBridge (Vector3 roadCenter1, Vector3 roadCenter2) {
+		roadCenter1 = HexMetrics.Perturb (roadCenter1);
+		roadCenter2 = HexMetrics.Perturb (roadCenter2);
+		Transform instance = Instantiate (bridge);
+		instance.localPosition = (roadCenter1 + roadCenter2) * 0.5f;
+		instance.forward = roadCenter2 - roadCenter1;
+		float length = Vector3.Distance (roadCenter1, roadCenter2);
+		Debug.Log ("Length: " + length);
+		instance.localScale = new Vector3 (1f, 1f, length * (1f / HexMetrics.bridgeDesignLength));
+		instance.SetParent (container, false);
 	}
 
 	Transform PickPrefab (HexFeatureCollection[] collection, int level, float hash, float choice) {
