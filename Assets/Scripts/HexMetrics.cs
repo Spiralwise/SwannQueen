@@ -62,8 +62,19 @@ public static class HexMetrics {
 		new float[] { 0.4f, 0.6f, 0.8f }
 	};
 
+	public const float wallHeight = 3f;
+	public const float wallThickness = 0.75f;
+
 	public static float[] GetFeatureThresholds (int level) {
 		return featureThesholds [level];
+	}
+
+	public static Vector3 WallThicknessOffset (Vector3 near, Vector3 far) {
+		Vector3 offset;
+		offset.x = far.x - near.x;
+		offset.y = 0f;
+		offset.z = far.z - near.z;
+		return offset.normalized * (wallThickness * 0.5f);
 	}
 
 	// Corners

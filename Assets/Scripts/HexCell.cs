@@ -10,6 +10,7 @@ public class HexCell : MonoBehaviour {
 
 	int elevation = int.MinValue;
 	int urbanLevel, farmLevel, plantLevel;
+	bool walled;
 	Color color;
 	bool hasIncomingRiver, hasOutgoingRiver;
 	HexDirection incomingRiver, outgoingRiver;
@@ -79,6 +80,18 @@ public class HexCell : MonoBehaviour {
 			if (plantLevel != value) {
 				plantLevel = value;
 				RefreshSelf ();
+			}
+		}
+	}
+
+	public bool Walled {
+		get {
+			return walled;
+		}
+		set {
+			if (walled != value) {
+				walled = value;
+				Refresh ();
 			}
 		}
 	}

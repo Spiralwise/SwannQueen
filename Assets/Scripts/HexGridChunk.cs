@@ -267,6 +267,9 @@ public class HexGridChunk : MonoBehaviour {
 			TriangulateEdgeTerraces (e1, cell, e2, neighbor, cell.HasRoadThroughEdge(direction));
 		else
 			TriangulateEdgeStrip (e1, cell.Color, e2, neighbor.Color, cell.HasRoadThroughEdge(direction));
+
+		featureManager.AddWall (e1, cell, e2, neighbor);
+
 		HexCell nextNeighbor = cell.GetNeighbor (direction.Next ());
 		if (direction <= HexDirection.E && nextNeighbor != null) {
 			Vector3 v5 = e1.v5 + HexMetrics.GetBridge (direction.Next ());
@@ -352,6 +355,8 @@ public class HexGridChunk : MonoBehaviour {
 			terrain.AddTriangle (bottom, left, right);
 			terrain.AddTriangleColor (bottomCell.Color, leftCell.Color, rightCell.Color);
 		}
+
+		featureManager.AddWall (bottom, bottomCell, left, leftCell, right, rightCell);
 	}
 
 	void TriangulateCornerTerraces (Vector3 begin, HexCell beginCell, Vector3 left, HexCell leftCell, Vector3 right, HexCell rightCell) {
