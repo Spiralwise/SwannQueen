@@ -4,6 +4,7 @@ public class HexFeatureManager : MonoBehaviour {
 
 	public HexFeatureCollection[] urbanCollections, farmCollections, plantCollections;
 	public HexMesh walls;
+	public Transform wallTower;
 
 	Transform container;
 
@@ -88,7 +89,7 @@ public class HexFeatureManager : MonoBehaviour {
 			AddWallSegment (c3, cell3, c1, cell1, c2, cell2);
 	}
 
-	void AddWallSegment (Vector3 nearLeft, Vector3 farLeft, Vector3 nearRight, Vector3 farRight) {
+	void AddWallSegment (Vector3 nearLeft, Vector3 farLeft, Vector3 nearRight, Vector3 farRight, bool addTower = false) {
 		nearLeft = HexMetrics.Perturb (nearLeft);
 		farLeft = HexMetrics.Perturb (farLeft);
 		nearRight = HexMetrics.Perturb (nearRight);
@@ -115,6 +116,15 @@ public class HexFeatureManager : MonoBehaviour {
 		v4.y = right.y + HexMetrics.wallHeight;
 		walls.AddQuadUnperturbed (v2, v1, v4, v3);
 		walls.AddQuadUnperturbed (topLeftNear, topRightNear, v3, v4);
+
+		if (addTower) {
+			Transform towerInstance = Instantiate (wallTower);
+			towerInstance.transform.localPosition = (left + right) * 0.5f;
+			Vector3 rightDirection = right - left;
+			rightDirection.y = 0f;
+			towerInstance.transform.right = rightDirection;
+			towerInstance.SetParent (container, false);
+		}
 	}
 
 	void AddWallSegment (Vector3 pivot, HexCell pivotCell, Vector3 left, HexCell leftCell, Vector3 right, HexCell rightCell) {
@@ -122,8 +132,14 @@ public class HexFeatureManager : MonoBehaviour {
 		bool hasRightWall = !rightCell.IsUnderWater && pivotCell.GetEdgeType (rightCell) != HexEdgeType.Cliff;
 		if (!pivotCell.IsUnderWater) {
 			if (hasLeftWall) {
-				if (hasRightWall)
-					AddWallSegment (pivot, left, pivot, right);
+				if (hasRightWall) {
+					bool hasTower = false;
+					if (leftCell.Elevation == rightCell.Elevation) {
+						HexHash hash = HexMetrics.SampleHashGrid ((pivot + left + right) * (1f / 3f));
+						hasTower = hash.e < HexMetrics.wallTowerThreshold;
+					}
+					AddWallSegment (pivot, left, pivot, right, hasTower);
+				}
 				else if (leftCell.Elevation < rightCell.Elevation)
 					AddWallWedge (pivot, left, right);
 				else
