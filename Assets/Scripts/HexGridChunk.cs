@@ -11,6 +11,7 @@ public class HexGridChunk : MonoBehaviour {
 	public HexMesh water;
 	public HexMesh waterShore;
 	public HexMesh estuaries;
+	public HexFeatureManager featureManager;
 	Canvas canvas;
 
 	public struct EdgeVertices {
@@ -77,6 +78,7 @@ public class HexGridChunk : MonoBehaviour {
 		water.Clear ();
 		waterShore.Clear ();
 		estuaries.Clear ();
+		featureManager.Clear ();
 		for (int c = 0; c < cells.Length; c++)
 			Triangulate (cells[c]);
 		terrain.Apply ();
@@ -85,12 +87,16 @@ public class HexGridChunk : MonoBehaviour {
 		water.Apply ();
 		waterShore.Apply ();
 		estuaries.Apply ();
+		featureManager.Apply ();
 	}
 
 	void Triangulate (HexCell cell) {
 		Vector3 position = cell.Position;
-		for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
+		for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++) {
 			Triangulate (d, cell);
+			if (!cell.IsUnderWater && !cell.HasRiver && !cell.HasRoads)
+				featureManager.AddFeature (cell, cell.Position);
+		}
 	}
 
 	void Triangulate (HexDirection direction, HexCell cell) {
@@ -110,9 +116,11 @@ public class HexGridChunk : MonoBehaviour {
 			} else {
 				TriangulateAdjacentToRiver (direction, cell, center, e);
 			}
-		}
-		else
+		} else {
 			TriangulateWithoutRiver (direction, cell, center, e);
+			if (!cell.IsUnderWater && !cell.HasRoadThroughEdge (direction))
+				featureManager.AddFeature (cell, (center + e.v1 + e.v5) * (1f / 3f));
+		}
 
 		if (direction <= HexDirection.SE)
 			TriangulateConnection (direction, cell, e);
@@ -220,6 +228,8 @@ public class HexGridChunk : MonoBehaviour {
 		);
 		TriangulateEdgeStrip (m, cell.Color, e, cell.Color);
 		TriangulateEdgeFan (center, m, cell.Color);
+		if (!cell.IsUnderWater && !cell.HasRoadThroughEdge (direction))
+			featureManager.AddFeature (cell, (center + e.v1 + e.v5) * (1f / 3f));
 	}
 
 	void TriangulateConnection (HexDirection direction, HexCell cell, EdgeVertices e1) {

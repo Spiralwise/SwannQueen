@@ -9,6 +9,7 @@ public class HexCell : MonoBehaviour {
 	public RectTransform uiRect;
 
 	int elevation = int.MinValue;
+	int urbanLevel, farmLevel, plantLevel;
 	Color color;
 	bool hasIncomingRiver, hasOutgoingRiver;
 	HexDirection incomingRiver, outgoingRiver;
@@ -43,6 +44,42 @@ public class HexCell : MonoBehaviour {
 					SetRoad (i, false);
 
 			Refresh ();
+		}
+	}
+
+	public int UrbanLevel {
+		get {
+			return urbanLevel;
+		}
+		set {
+			if (urbanLevel != value) {
+				urbanLevel = value;
+				RefreshSelf ();
+			}
+		}
+	}
+
+	public int FarmLevel {
+		get {
+			return farmLevel;
+		}
+		set {
+			if (farmLevel != value) {
+				farmLevel = value;
+				RefreshSelf ();
+			}
+		}
+	}
+
+	public int PlantLevel {
+		get {
+			return plantLevel;
+		}
+		set {
+			if (plantLevel != value) {
+				plantLevel = value;
+				RefreshSelf ();
+			}
 		}
 	}
 

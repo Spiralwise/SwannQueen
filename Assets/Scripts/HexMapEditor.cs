@@ -17,8 +17,10 @@ public class HexMapEditor : MonoBehaviour {
 	bool applyColor;
 	int activeElevation;
 	int activeWaterLevel;
+	int activeUrbanLevel, activeFarmLevel, activePlantLevel;
 	bool applyElevation = true;
 	bool applyWaterLevel = true;
+	bool applyUrbanLevel = true, applyFarmLevel = true, applyPlantLevel = true;
 	int brushSize;
 
 	enum OptionalToggle {
@@ -90,6 +92,30 @@ public class HexMapEditor : MonoBehaviour {
 		activeWaterLevel = (int)level;
 	}
 
+	public void SetApplyUrbanLevel (bool toggle) {
+		applyUrbanLevel = toggle;
+	}
+
+	public void SetUrbanLevel (float level) {
+		activeUrbanLevel = (int)level;
+	}
+
+	public void SetApplyFarmLevel (bool toggle) {
+		applyFarmLevel = toggle;
+	}
+
+	public void SetFarmLevel (float level) {
+		activeFarmLevel = (int)level;
+	}
+
+	public void SetApplyPlantLevel (bool toggle) {
+		applyPlantLevel = toggle;
+	}
+
+	public void SetPlantLevel (float level) {
+		activePlantLevel = (int)level;
+	}
+
 	public void SetBrushSize (float size) {
 		brushSize = (int)size;
 	}
@@ -114,6 +140,15 @@ public class HexMapEditor : MonoBehaviour {
 
 			if (roadMode == OptionalToggle.No)
 				cell.RemoveRoads ();
+
+			if (applyUrbanLevel)
+				cell.UrbanLevel = activeUrbanLevel;
+
+			if (applyFarmLevel)
+				cell.FarmLevel = activeFarmLevel;
+
+			if (applyPlantLevel)
+				cell.PlantLevel = activePlantLevel;
 			
 			if (isDrag) {
 				HexCell that = cell.GetNeighbor (dragDirection.Opposite ());

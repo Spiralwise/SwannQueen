@@ -41,6 +41,32 @@ public static class HexMetrics {
 	public const float cellPerturbStrength = 4f;
 	public const float elevationPerturbStrenght = 1.5f;
 
+	// Hash grid (for rotational perturbation)
+	public const int hashGridSize = 256;
+	public const float hashGridScale = 0.25f;
+	static HexHash[] hashGrid;
+
+	public static void InitializeHashGrid (int seed) {
+		hashGrid = new HexHash[hashGridSize * hashGridSize];
+		Random.State currentState = Random.state;
+		Random.InitState (seed);
+		for (int i = 0; i < hashGrid.Length; i++)
+			hashGrid [i] = HexHash.Create();
+		Random.state = currentState;
+	}
+
+	//Features
+	static float[][] featureThesholds = {
+		new float[] { 0.0f, 0.0f, 0.4f },
+		new float[] { 0.0f, 0.4f, 0.6f },
+		new float[] { 0.4f, 0.6f, 0.8f }
+	};
+
+	public static float[] GetFeatureThresholds (int level) {
+		return featureThesholds [level];
+	}
+
+	// Corners
 	public static Vector3 GetFirstCorner (HexDirection direction) {
 		return corners [(int)direction];
 	}
@@ -104,6 +130,16 @@ public static class HexMetrics {
 		return noiseSource.GetPixelBilinear (
 			position.x * noiseScale,
 			position.z * noiseScale);
+	}
+
+	public static HexHash SampleHashGrid (Vector3 pos) {
+		int x = (int)(pos.x * hashGridScale) % hashGridSize;
+		if (x < 0)
+			x += hashGridSize;
+		int z = (int)(pos.z * hashGridScale) % hashGridSize;
+		if (z < 0)
+			z += hashGridSize;
+		return hashGrid [x + z * hashGridSize];
 	}
 
 	public static Vector3 Perturb (Vector3 position) {
