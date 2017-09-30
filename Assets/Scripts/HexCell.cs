@@ -32,6 +32,13 @@ public class HexCell : MonoBehaviour {
 		writer.Write (farmLevel);
 		writer.Write (plantLevel);
 		writer.Write (specialIndex);
+		writer.Write (walled);
+		writer.Write (hasIncomingRiver);
+		writer.Write ((int)incomingRiver);
+		writer.Write (hasOutgoingRiver);
+		writer.Write ((int)outgoingRiver);
+		for (int i = 0; i < roads.Length; i++)
+			writer.Write (roads [i]);
 	}
 
 	public void Load (BinaryReader reader) {
@@ -43,6 +50,13 @@ public class HexCell : MonoBehaviour {
 		farmLevel = reader.ReadInt32 ();
 		plantLevel = reader.ReadInt32 ();
 		specialIndex = reader.ReadInt32 ();
+		walled = reader.ReadBoolean ();
+		hasIncomingRiver = reader.ReadBoolean ();
+		incomingRiver = (HexDirection)reader.ReadInt32 ();
+		hasOutgoingRiver = reader.ReadBoolean ();
+		outgoingRiver = (HexDirection)reader.ReadInt32 ();
+		for (int i = 0; i < roads.Length; i++)
+			roads [i] = reader.ReadBoolean ();
 	}
 
 	public int Elevation {
