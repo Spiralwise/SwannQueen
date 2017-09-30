@@ -26,10 +26,23 @@ public class HexCell : MonoBehaviour {
 
 	public void Save (BinaryWriter writer) {
 		writer.Write (terrainTypeIndex);
+		writer.Write (elevation);
+		writer.Write (waterLevel);
+		writer.Write (urbanLevel);
+		writer.Write (farmLevel);
+		writer.Write (plantLevel);
+		writer.Write (specialIndex);
 	}
 
 	public void Load (BinaryReader reader) {
 		terrainTypeIndex = reader.ReadInt32 ();
+		elevation = reader.ReadInt32 ();
+		RefreshPosition ();
+		waterLevel = reader.ReadInt32 ();
+		urbanLevel = reader.ReadInt32 ();
+		farmLevel = reader.ReadInt32 ();
+		plantLevel = reader.ReadInt32 ();
+		specialIndex = reader.ReadInt32 ();
 	}
 
 	public int Elevation {
@@ -40,20 +53,7 @@ public class HexCell : MonoBehaviour {
 			if (elevation == value)
 				return;
 			elevation = value;
-			Vector3 position = transform.localPosition;
-			position.y = value * HexMetrics.elevationStep;
-			position.y += ((HexMetrics.SampleNoise (position)).y * 2f - 1f) * HexMetrics.elevationPerturbStrenght;
-			transform.localPosition = position;
-			Vector3 uiPosition = uiRect.localPosition;
-			uiPosition.z = -position.y;
-			uiRect.localPosition = uiPosition;
-
-			ValidateRivers ();
-
-			for (int i = 0; i < roads.Length; i++)
-				if (roads [i] && GetElevationDifference ((HexDirection)i) > 1)
-					SetRoad (i, false);
-
+			RefreshPosition ();
 			Refresh ();
 		}
 	}
@@ -366,5 +366,21 @@ public class HexCell : MonoBehaviour {
 
 	void RefreshSelf () {
 		chunk.Refresh ();
+	}
+
+	void RefreshPosition () {
+		Vector3 position = transform.localPosition;
+		position.y = elevation * HexMetrics.elevationStep;
+		position.y += ((HexMetrics.SampleNoise (position)).y * 2f - 1f) * HexMetrics.elevationPerturbStrenght;
+		transform.localPosition = position;
+		Vector3 uiPosition = uiRect.localPosition;
+		uiPosition.z = -position.y;
+		uiRect.localPosition = uiPosition;
+
+		ValidateRivers ();
+
+		for (int i = 0; i < roads.Length; i++)
+			if (roads [i] && GetElevationDifference ((HexDirection)i) > 1)
+				SetRoad (i, false);
 	}
 }
