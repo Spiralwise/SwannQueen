@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -37,6 +38,18 @@ public class HexGrid : MonoBehaviour {
 			HexMetrics.InitializeHashGrid (seed);
 			HexMetrics.colors = colors;
 		}
+	}
+
+	public void Save (BinaryWriter writer) {
+		for (int c = 0; c < cells.Length; c++)
+			cells [c].Save (writer);
+	}
+
+	public void Load (BinaryReader reader) {
+		for (int c = 0; c < cells.Length; c++)
+			cells [c].Load (reader);
+		for (int c = 0; c < chunks.Length; c++)
+			chunks [c].Refresh ();
 	}
 
 	void CreateChunks () {

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 public class HexCell : MonoBehaviour {
@@ -22,6 +23,14 @@ public class HexCell : MonoBehaviour {
 
 	[SerializeField]
 	bool[] roads;
+
+	public void Save (BinaryWriter writer) {
+		writer.Write (terrainTypeIndex);
+	}
+
+	public void Load (BinaryReader reader) {
+		terrainTypeIndex = reader.ReadInt32 ();
+	}
 
 	public int Elevation {
 		get {

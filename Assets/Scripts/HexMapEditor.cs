@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -55,6 +56,22 @@ public class HexMapEditor : MonoBehaviour {
 		} else {
 			previousCell = null;
 			antePreviousCell = null;
+		}
+	}
+
+	public void Save () {
+		string path = Path.Combine (Application.persistentDataPath, "demo.map");//TODO (2017-09-30) Put path in definition
+		using (BinaryWriter writer = new BinaryWriter (File.Open (path, FileMode.Create))) {
+			grid.Save (writer);
+			Debug.Log ("Map saved to " + path);
+		}
+	}
+
+	public void Load () {
+		string path = Path.Combine (Application.persistentDataPath, "demo.map");
+		using (BinaryReader reader = new BinaryReader(File.OpenRead(path))) {
+			grid.Load (reader);
+			Debug.Log ("Map loaded");
 		}
 	}
 
