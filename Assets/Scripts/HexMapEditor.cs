@@ -13,7 +13,7 @@ public class HexMapEditor : MonoBehaviour {
 	HexCell previousCell;
 	HexCell antePreviousCell;
 
-	int activeTerrainTypeIndex;
+	int activeTerrainTypeIndex = -1;
 	bool applyColor;
 	int activeElevation;
 	int activeWaterLevel;
@@ -62,6 +62,7 @@ public class HexMapEditor : MonoBehaviour {
 	public void Save () {
 		string path = Path.Combine (Application.persistentDataPath, "demo.map");//TODO (2017-09-30) Put path in definition
 		using (BinaryWriter writer = new BinaryWriter (File.Open (path, FileMode.Create))) {
+			writer.Write (0);
 			grid.Save (writer);
 			Debug.Log ("Map saved to " + path);
 		}
@@ -70,8 +71,15 @@ public class HexMapEditor : MonoBehaviour {
 	public void Load () {
 		string path = Path.Combine (Application.persistentDataPath, "demo.map");
 		using (BinaryReader reader = new BinaryReader(File.OpenRead(path))) {
-			grid.Load (reader);
-			Debug.Log ("Map loaded");
+			int header = reader.ReadInt32 ();
+			Debug.Log ("header is " + header);
+			if (header == 0) {
+				grid.Load (reader);
+				Debug.Log ("Map loaded from " + path);
+			}
+			else {
+				Debug.LogWarning ("Unknown map format " + header + " from " + path + ". Map not loaded.");
+			}
 		}
 	}
 
