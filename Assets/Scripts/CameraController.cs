@@ -2,6 +2,8 @@
 
 public class CameraController : MonoBehaviour {
 
+	static CameraController instance;
+
 	public float moveSpeedMinZoom, moveSpeedMaxZoom;
 	public float stickMinZoom, stickMaxZoom;
 	public float swivelMinZoom, swivelMaxZoom;
@@ -13,7 +15,14 @@ public class CameraController : MonoBehaviour {
 	float zoom = 1f;
 	float rotationAngle;
 
+	public static bool Locked {
+		set {
+			instance.enabled = !value;
+		}
+	}
+
 	void Awake () {
+		instance = this;
 		swivel = transform.GetChild (0);
 		stick = swivel.GetChild (0);
 	}
@@ -50,6 +59,10 @@ public class CameraController : MonoBehaviour {
 		transform.localRotation = Quaternion.Euler (0f, rotationAngle, 0f);
 	}
 
+	public static void ValidatePosition () {
+		instance.AdjustPosition (0f, 0f);
+	}
+
 	void AdjustPosition (float xDelta, float yDelta) {
 		Vector3 direction = transform.localRotation * new Vector3 (xDelta, 0f, yDelta).normalized;
 		float moveSpeed = Mathf.Lerp (moveSpeedMinZoom, moveSpeedMaxZoom, zoom);
@@ -62,9 +75,9 @@ public class CameraController : MonoBehaviour {
 	}
 
 	Vector3 ClampPosition (Vector3 position) {
-		float xMax = (grid.chunkCountX * HexMetrics.chunkSizeX -0.5f) * (2f * HexMetrics.innerRadius);
+		float xMax = (grid.cellCountX - 0.5f) * (2f * HexMetrics.innerRadius);
 		position.x = Mathf.Clamp (position.x, 0f, xMax);
-		float yMax = (grid.chunkCountY * HexMetrics.chunkSizeY -1f) * (2f * HexMetrics.innerRadius);
+		float yMax = (grid.cellCountY -1f) * (2f * HexMetrics.innerRadius);
 		position.y = Mathf.Clamp (position.y, 0f, yMax);
 
 		return position;

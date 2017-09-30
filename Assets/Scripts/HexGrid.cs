@@ -6,8 +6,10 @@ using UnityEngine.UI;
 
 public class HexGrid : MonoBehaviour {
 
-	public int chunkCountX = 4;
-	public int chunkCountY = 3;
+//	public int chunkCountX = 4;
+//	public int chunkCountY = 3;
+	public int cellCountX = 20;
+	public int cellCountY = 15;
 	public HexCell hexPrefab;
 	public HexGridChunk chunkPrefab;
 	public Color[] colors;
@@ -16,7 +18,7 @@ public class HexGrid : MonoBehaviour {
 
 	public Text hexLabelPrefab;
 
-	int cellCountX, cellCountY;
+	int chunkCountX, chunkCountY;
 	HexCell[] cells;
 	HexGridChunk[] chunks;
 
@@ -25,11 +27,7 @@ public class HexGrid : MonoBehaviour {
 		HexMetrics.InitializeHashGrid (seed);
 		HexMetrics.colors = colors;
 
-		cellCountX = chunkCountX * HexMetrics.chunkSizeX;
-		cellCountY = chunkCountY * HexMetrics.chunkSizeY;
-
-		CreateChunks ();
-		CreateCells ();
+		CreateMap (cellCountX, cellCountY);
 	}
 
 	void OnEnable () {
@@ -38,6 +36,23 @@ public class HexGrid : MonoBehaviour {
 			HexMetrics.InitializeHashGrid (seed);
 			HexMetrics.colors = colors;
 		}
+	}
+
+	public void CreateMap (int x, int y) {
+		if (x <= 0 || x % HexMetrics.chunkSizeX != 0
+		    || y <= 0 || y % HexMetrics.chunkSizeY != 0) {
+			Debug.LogError ("Can't create a new map: Unsupported map size.");
+			return;
+		}
+		if (chunks != null)
+			for (int i = 0; i < chunks.Length; i++)
+				Destroy (chunks [i].gameObject);
+		cellCountX = x;
+		cellCountY = y;
+		chunkCountX = cellCountX / HexMetrics.chunkSizeX;
+		chunkCountY = cellCountY / HexMetrics.chunkSizeY;
+		CreateChunks ();
+		CreateCells ();
 	}
 
 	public void Save (BinaryWriter writer) {

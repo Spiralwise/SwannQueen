@@ -57,6 +57,7 @@
      <Compile Include="Assets\Scripts\HexMapEditor.cs" />
      <Compile Include="Assets\Scripts\HexMesh.cs" />
      <Compile Include="Assets\Scripts\HexMetrics.cs" />
+     <Compile Include="Assets\Scripts\NewMapMenu.cs" />
      <None Include="Assets\Shaders\RoadShader.shader" />
      <None Include="Assets\Shaders\WaterShader.shader" />
      <None Include="Assets\Shaders\HexShader.cginc" />
