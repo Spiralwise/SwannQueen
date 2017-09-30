@@ -38,11 +38,12 @@ public class HexGrid : MonoBehaviour {
 		}
 	}
 
-	public void CreateMap (int x, int y) {
+	public bool CreateMap (int x, int y) {
+		Debug.Log ("Who you gonna call?");
 		if (x <= 0 || x % HexMetrics.chunkSizeX != 0
 		    || y <= 0 || y % HexMetrics.chunkSizeY != 0) {
 			Debug.LogError ("Can't create a new map: Unsupported map size.");
-			return;
+			return false;
 		}
 		if (chunks != null)
 			for (int i = 0; i < chunks.Length; i++)
@@ -53,14 +54,25 @@ public class HexGrid : MonoBehaviour {
 		chunkCountY = cellCountY / HexMetrics.chunkSizeY;
 		CreateChunks ();
 		CreateCells ();
+		return true;
 	}
 
 	public void Save (BinaryWriter writer) {
+		writer.Write (cellCountX);
+		writer.Write (cellCountY);
 		for (int c = 0; c < cells.Length; c++)
 			cells [c].Save (writer);
 	}
 
-	public void Load (BinaryReader reader) {
+	public void Load (BinaryReader reader, int header) {
+		int x = 20, y = 15;
+		if (header >= 1) {
+			x = reader.ReadInt32 ();
+			y = reader.ReadInt32 ();
+		}
+		if ((x != cellCountX || y != cellCountY) && !CreateMap (x, y))
+			return;
+		
 		for (int c = 0; c < cells.Length; c++)
 			cells [c].Load (reader);
 		for (int c = 0; c < chunks.Length; c++)
