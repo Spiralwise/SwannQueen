@@ -35,6 +35,9 @@ public static class HexMetrics {
 		new Vector3 (-innerRadius, 0f, 0.5f * outterRadius)
 	};
 
+	// Colors
+	public static Color[] colors;
+
 	// Vertex perturbation
 	public static Texture2D noiseSource;
 	public const float noiseScale = 0.003f;

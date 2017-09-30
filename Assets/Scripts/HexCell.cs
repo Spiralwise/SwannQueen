@@ -12,7 +12,7 @@ public class HexCell : MonoBehaviour {
 	int urbanLevel, farmLevel, plantLevel;
 	int specialIndex;
 	bool walled;
-	Color color;
+	int terrainTypeIndex;
 	bool hasIncomingRiver, hasOutgoingRiver;
 	HexDirection incomingRiver, outgoingRiver;
 	int waterLevel;
@@ -116,15 +116,21 @@ public class HexCell : MonoBehaviour {
 		}
 	}
 
-	public Color Color {
+	public int TerrainTypeIndex {
 		get {
-			return color;
+			return terrainTypeIndex;
 		}
 		set {
-			if (color == value)
-				return;
-			color = value;
-			Refresh ();
+			if (terrainTypeIndex != value) {
+				terrainTypeIndex = value;
+				Refresh ();
+			}
+		}
+	}
+
+	public Color Color {
+		get {
+			return HexMetrics.colors[terrainTypeIndex];
 		}
 	}
 

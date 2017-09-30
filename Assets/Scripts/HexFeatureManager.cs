@@ -197,7 +197,6 @@ public class HexFeatureManager : MonoBehaviour {
 		instance.localPosition = (roadCenter1 + roadCenter2) * 0.5f;
 		instance.forward = roadCenter2 - roadCenter1;
 		float length = Vector3.Distance (roadCenter1, roadCenter2);
-		Debug.Log ("Length: " + length);
 		instance.localScale = new Vector3 (1f, 1f, length * (1f / HexMetrics.bridgeDesignLength));
 		instance.SetParent (container, false);
 	}

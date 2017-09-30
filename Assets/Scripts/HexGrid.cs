@@ -9,8 +9,7 @@ public class HexGrid : MonoBehaviour {
 	public int chunkCountY = 3;
 	public HexCell hexPrefab;
 	public HexGridChunk chunkPrefab;
-	public Color defaultColor = Color.white;
-	public Color touchedColor = Color.magenta;
+	public Color[] colors;
 	public Texture2D noiseSource;
 	public int seed;
 
@@ -23,6 +22,7 @@ public class HexGrid : MonoBehaviour {
 	public void Awake () {
 		HexMetrics.noiseSource = noiseSource;
 		HexMetrics.InitializeHashGrid (seed);
+		HexMetrics.colors = colors;
 
 		cellCountX = chunkCountX * HexMetrics.chunkSizeX;
 		cellCountY = chunkCountY * HexMetrics.chunkSizeY;
@@ -35,6 +35,7 @@ public class HexGrid : MonoBehaviour {
 		if (!HexMetrics.noiseSource) {
 			HexMetrics.noiseSource = noiseSource;
 			HexMetrics.InitializeHashGrid (seed);
+			HexMetrics.colors = colors;
 		}
 	}
 
@@ -73,7 +74,6 @@ public class HexGrid : MonoBehaviour {
 		HexCell localCell = cells[i] = Instantiate<HexCell> (hexPrefab);
 		localCell.coordinates = HexCoordinates.FromOffsetCoordinates (x, y);
 		localCell.transform.position = position;
-		localCell.Color = defaultColor;
 
 		Text localLabel = Instantiate<Text> (hexLabelPrefab);
 		localLabel.rectTransform.anchoredPosition = new Vector2 (position.x, position.z);
