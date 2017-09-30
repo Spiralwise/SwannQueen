@@ -59,30 +59,6 @@ public class HexMapEditor : MonoBehaviour {
 		}
 	}
 
-	public void Save () {
-		string path = Path.Combine (Application.persistentDataPath, "demo.map");//TODO (2017-09-30) Put path in definition
-		using (BinaryWriter writer = new BinaryWriter (File.Open (path, FileMode.Create))) {
-			writer.Write (1);
-			grid.Save (writer);
-			Debug.Log ("Map saved to " + path + ".");
-		}
-	}
-
-	public void Load () {
-		string path = Path.Combine (Application.persistentDataPath, "demo.map");
-		using (BinaryReader reader = new BinaryReader(File.OpenRead(path))) {
-			int header = reader.ReadInt32 ();
-			if (header <= 1) {
-				grid.Load (reader, header);
-				CameraController.ValidatePosition ();
-				Debug.Log ("Map loaded from " + path + " (Version: " + header + ").");
-			}
-			else {
-				Debug.LogWarning ("Unknown map format " + header + " from " + path + ". Map not loaded.");
-			}
-		}
-	}
-
 	public void SetTerrainTypeIndex (int index) {
 		activeTerrainTypeIndex = index;
 	}

@@ -39,7 +39,6 @@ public class HexGrid : MonoBehaviour {
 	}
 
 	public bool CreateMap (int x, int y) {
-		Debug.Log ("Who you gonna call?");
 		if (x <= 0 || x % HexMetrics.chunkSizeX != 0
 		    || y <= 0 || y % HexMetrics.chunkSizeY != 0) {
 			Debug.LogError ("Can't create a new map: Unsupported map size.");
