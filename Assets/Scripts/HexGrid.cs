@@ -205,7 +205,7 @@ public class HexGrid : MonoBehaviour {
 				} else if (distance < neighbor.Distance)
 					neighbor.Distance = distance;
 				openSet.Sort ((x, y) => x.Distance.CompareTo (y.Distance));
-			}
+			} // TODO (2017-10-01) How about rivers?
 		}
 	}
 
