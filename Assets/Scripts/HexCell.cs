@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class HexCell : MonoBehaviour {
 
@@ -17,6 +18,8 @@ public class HexCell : MonoBehaviour {
 	bool hasIncomingRiver, hasOutgoingRiver;
 	HexDirection incomingRiver, outgoingRiver;
 	int waterLevel;
+
+	int distance;
 
 	[SerializeField]
 	HexCell[] neighbors;
@@ -171,6 +174,16 @@ public class HexCell : MonoBehaviour {
 	public Vector3 Position {
 		get {
 			return transform.localPosition;
+		}
+	}
+
+	public int Distance {
+		get {
+			return distance;
+		}
+		set {
+			distance = value;
+			UpdateDistanceLabel ();
 		}
 	}
 
@@ -376,6 +389,11 @@ public class HexCell : MonoBehaviour {
 				SetRoad (i, false);
 			}
 		}
+	}
+
+	void UpdateDistanceLabel () {
+		Text label = uiRect.GetComponent<Text> ();
+		label.text = distance.ToString ();
 	}
 
 	void Refresh () {

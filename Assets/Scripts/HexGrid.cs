@@ -123,7 +123,6 @@ public class HexGrid : MonoBehaviour {
 
 		Text localLabel = Instantiate<Text> (hexLabelPrefab);
 		localLabel.rectTransform.anchoredPosition = new Vector2 (position.x, position.z);
-		localLabel.text = localCell.coordinates.ToStringOnSeparateLines ();
 
 		if (x > 0)
 			localCell.SetNeighbor (HexDirection.W, cells [x - 1 + y * cellCountX]);
@@ -161,6 +160,11 @@ public class HexGrid : MonoBehaviour {
 		if (x < 0 || x >= cellCountX)
 			return null;
 		return cells [x + y * cellCountX];
+	}
+
+	public void FindDistanceTo (HexCell cell) {
+		for (int i = 0; i < cells.Length; i++)
+			cells [i].Distance = cell.coordinates.DistanceTo (cells [i].coordinates);
 	}
 
 	public void ShowUI (bool visible) {

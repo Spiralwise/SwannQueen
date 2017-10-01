@@ -7,6 +7,9 @@ using UnityEngine.EventSystems;
 public class HexMapEditor : MonoBehaviour {
 
 	public HexGrid grid;
+	public CanvasGroup editorPanel;
+
+	bool editMode;
 
 	bool isDrag;
 	HexDirection dragDirection;
@@ -50,13 +53,23 @@ public class HexMapEditor : MonoBehaviour {
 				ValidateDrag (currentCell);
 			else
 				isDrag = false;
-			EditCells (currentCell);
+			if (editMode)
+				EditCells (currentCell);
+			else
+				grid.FindDistanceTo (currentCell);
 			antePreviousCell = previousCell;
 			previousCell = currentCell;
 		} else {
 			previousCell = null;
 			antePreviousCell = null;
 		}
+	}
+
+	public void SetEditMode (bool toggle) {
+		editMode = toggle;
+		grid.ShowUI (!toggle);
+		editorPanel.blocksRaycasts = toggle;
+		editorPanel.alpha = toggle ? 1.0f : 0.0f;
 	}
 
 	public void SetTerrainTypeIndex (int index) {

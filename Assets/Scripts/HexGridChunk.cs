@@ -52,7 +52,6 @@ public class HexGridChunk : MonoBehaviour {
 		canvas = GetComponentInChildren<Canvas> ();
 
 		cells = new HexCell[HexMetrics.chunkSizeX * HexMetrics.chunkSizeY];
-		ShowUI (false);
 	}
 
 	public void AddCell (int index, HexCell cell) {

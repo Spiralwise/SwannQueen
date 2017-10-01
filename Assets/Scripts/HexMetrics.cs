@@ -249,6 +249,10 @@ public struct HexCoordinates {
 		return new HexCoordinates (iX, iY);
 	}
 
+	public int DistanceTo (HexCoordinates that) {
+		return (Mathf.Abs (x - that.x) + Mathf.Abs (y - that.y) + Mathf.Abs (Z - that.Z)) / 2;
+	}
+
 	public string toString () {
 		return "(" + X.ToString () + ", " + Z.ToString () + ", " + Y.ToString () + ")";
 	}
