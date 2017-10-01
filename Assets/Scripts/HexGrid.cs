@@ -64,6 +64,7 @@ public class HexGrid : MonoBehaviour {
 	}
 
 	public void Load (BinaryReader reader, int header) {
+		StopAllCoroutines ();
 		int x = 20, y = 15;
 		if (header >= 1) {
 			x = reader.ReadInt32 ();
@@ -163,8 +164,32 @@ public class HexGrid : MonoBehaviour {
 	}
 
 	public void FindDistanceTo (HexCell cell) {
+		StopAllCoroutines ();
+		StartCoroutine (Search (cell));
+	}
+
+	IEnumerator Search (HexCell cell) {
 		for (int i = 0; i < cells.Length; i++)
-			cells [i].Distance = cell.coordinates.DistanceTo (cells [i].coordinates);
+			cells [i].Distance = int.MaxValue;
+		WaitForSeconds delay = new WaitForSeconds (1 / 60f);
+		Queue<HexCell> openSet = new Queue<HexCell> ();
+		cell.Distance = 0;
+		openSet.Enqueue (cell);
+		while (openSet.Count > 0) {
+			yield return delay;
+			HexCell current = openSet.Dequeue ();
+			for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++) {
+				HexCell neighbor = current.GetNeighbor (d);
+				if (neighbor == null || neighbor.Distance != int.MaxValue)
+					continue;
+				if (neighbor.IsUnderWater)
+					continue;
+				if (current.GetEdgeType (neighbor) == HexEdgeType.Cliff)
+					continue;
+				neighbor.Distance = current.Distance + 1;
+				openSet.Enqueue (neighbor);
+			}
+		}
 	}
 
 	public void ShowUI (bool visible) {
