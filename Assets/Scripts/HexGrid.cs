@@ -17,11 +17,14 @@ public class HexGrid : MonoBehaviour {
 
 	public Text hexLabelPrefab;
 
+	public Material terrainMaterial;
+
 	int chunkCountX, chunkCountY;
 	HexCell[] cells;
 	HexGridChunk[] chunks;
 
 	public void Awake () {
+		terrainMaterial.DisableKeyword ("GRID_ON");
 		HexMetrics.noiseSource = noiseSource;
 		HexMetrics.InitializeHashGrid (seed);
 
@@ -73,6 +76,13 @@ public class HexGrid : MonoBehaviour {
 			cells [c].Load (reader);
 		for (int c = 0; c < chunks.Length; c++)
 			chunks [c].Refresh ();
+	}
+
+	public void ShowGrid (bool visible) {
+		if (visible)
+			terrainMaterial.EnableKeyword ("GRID_ON");
+		else
+			terrainMaterial.DisableKeyword ("GRID_ON");
 	}
 
 	void CreateChunks () {

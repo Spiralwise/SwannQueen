@@ -2,6 +2,7 @@
 	Properties {
 		_Color ("Color", Color) = (1,1,1,1)
 		_MainTex ("Terrain Texture Array", 2DArray) = "white" {}
+		_GridTex ("Grid Texture", 2D) = "white" {}
 		_Glossiness ("Smoothness", Range(0,1)) = 0.5
 		_Metallic ("Metallic", Range(0,1)) = 0.0
 	}
@@ -16,6 +17,8 @@
 		// Use shader model 3.0 target, to get nicer looking lighting
 		#pragma target 3.5
 
+		#pragma multi_compile _ GRID_ON
+
 		UNITY_DECLARE_TEX2DARRAY (_MainTex);
 
 		struct Input {
@@ -27,6 +30,7 @@
 		half _Glossiness;
 		half _Metallic;
 		fixed4 _Color;
+		sampler2D _GridTex;
 
 		// Add instancing support for this shader. You need to check 'Enable Instancing' on materials that use the shader.
 		// See https://docs.unity3d.com/Manual/GPUInstancing.html for more information about instancing.
@@ -48,7 +52,14 @@
 
 		void surf (Input IN, inout SurfaceOutputStandard o) {
 			fixed4 c = GetTerrainColor(IN, 0) + GetTerrainColor(IN, 1) + GetTerrainColor(IN, 2);
-			o.Albedo = c.rgb * _Color;
+			fixed4 grid = 1;
+			#if defined(GRID_ON)
+				float2 gridUV = IN.worldPos.xz;
+				gridUV.x *= 1 / 34.64101616;
+				gridUV.y *= 1 / 30.0;
+				grid = tex2D(_GridTex, gridUV);
+			#endif
+			o.Albedo = c.rgb * _Color * grid;
 			// Metallic and smoothness come from slider variables
 			o.Metallic = _Metallic;
 			o.Smoothness = _Glossiness;
