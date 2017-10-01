@@ -168,12 +168,6 @@ public class HexCell : MonoBehaviour {
 		}
 	}
 
-	public Color Color {
-		get {
-			return HexMetrics.colors[terrainTypeIndex];
-		}
-	}
-
 	public Vector3 Position {
 		get {
 			return transform.localPosition;
