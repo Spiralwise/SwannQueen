@@ -163,22 +163,34 @@ public class HexGrid : MonoBehaviour {
 		return cells [x + y * cellCountX];
 	}
 
-	public void FindDistanceTo (HexCell cell) {
+	public void FindPath (HexCell fromCell, HexCell toCell) {
 		StopAllCoroutines ();
-		StartCoroutine (Search (cell));
+		StartCoroutine (Search (fromCell, toCell));
 	}
 
-	IEnumerator Search (HexCell cell) {
-		for (int i = 0; i < cells.Length; i++)
+	IEnumerator Search (HexCell fromCell, HexCell toCell) {
+		for (int i = 0; i < cells.Length; i++) {
 			cells [i].Distance = int.MaxValue;
+			cells [i].DisableOutline ();
+		}
+		fromCell.EnableOutline (Color.blue);
+		toCell.EnableOutline (Color.red);
 		WaitForSeconds delay = new WaitForSeconds (1 / 60f);
 		List<HexCell> openSet = new List<HexCell> ();
-		cell.Distance = 0;
-		openSet.Add (cell);
+		fromCell.Distance = 0;
+		openSet.Add (fromCell);
 		while (openSet.Count > 0) {
 			yield return delay;
 			HexCell current = openSet [0];
 			openSet.RemoveAt (0);
+			if (current == toCell) {
+				current = current.PathFrom;
+				while (current != fromCell) {
+					current.EnableOutline (Color.white);
+					current = current.PathFrom;
+				}
+				break;
+			}
 			for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++) {
 				HexCell neighbor = current.GetNeighbor (d);
 				if (neighbor == null)
@@ -201,9 +213,12 @@ public class HexGrid : MonoBehaviour {
 				
 				if (neighbor.Distance == int.MaxValue) {
 					neighbor.Distance = distance;
+					neighbor.PathFrom = current;
 					openSet.Add (neighbor);
-				} else if (distance < neighbor.Distance)
+				} else if (distance < neighbor.Distance) {
 					neighbor.Distance = distance;
+					neighbor.PathFrom = current;
+				}
 				openSet.Sort ((x, y) => x.Distance.CompareTo (y.Distance));
 			} // TODO (2017-10-01) How about rivers?
 		}

@@ -79,6 +79,11 @@ public class HexCell : MonoBehaviour {
 			roads [i] = (roadFlags & (1 << i)) != 0;
 	}
 
+	public HexCell PathFrom {
+		get;
+		set;
+	}
+
 	public int Elevation {
 		get {
 			return elevation;
@@ -394,6 +399,17 @@ public class HexCell : MonoBehaviour {
 	void UpdateDistanceLabel () {
 		Text label = uiRect.GetComponent<Text> ();
 		label.text = distance == int.MaxValue ? "" : distance.ToString ();
+	}
+		
+	public void DisableOutline () {
+		Image outline = uiRect.GetChild (0).GetComponent<Image> ();
+		outline.enabled = false;
+	}
+
+	public void EnableOutline (Color color) {
+		Image outline = uiRect.GetChild (0).GetComponent<Image> ();
+		outline.color = color;
+		outline.enabled = true;
 	}
 
 	void Refresh () {

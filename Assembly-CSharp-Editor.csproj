@@ -49,6 +49,7 @@
      <Compile Include="Assets\Scripts\Editor\HexCoordinateDrawer.cs" />
      <Compile Include="Assets\Scripts\Editor\TextureArrayWizard.cs" />
      <None Include="Assets\Shaders\RoadShader.shader" />
+     <None Include="Assets\Shaders\OutlineShader.shader" />
      <None Include="Assets\Shaders\WaterShader.shader" />
      <None Include="Assets\Shaders\HexShader.cginc" />
      <None Include="Assets\Shaders\HexShader.shader" />

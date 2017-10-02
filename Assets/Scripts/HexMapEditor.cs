@@ -13,6 +13,7 @@ public class HexMapEditor : MonoBehaviour {
 
 	bool isDrag;
 	HexDirection dragDirection;
+	HexCell searchFromCell, searchToCell;
 	HexCell previousCell;
 	HexCell antePreviousCell;
 
@@ -55,8 +56,18 @@ public class HexMapEditor : MonoBehaviour {
 				isDrag = false;
 			if (editMode)
 				EditCells (currentCell);
-			else
-				grid.FindDistanceTo (currentCell);
+			else if (Input.GetKey(KeyCode.LeftShift) && searchToCell != currentCell) {
+				if (searchFromCell)
+					searchFromCell.DisableOutline ();
+				searchFromCell = currentCell;
+				searchFromCell.EnableOutline (Color.blue);
+				if (searchToCell)
+					grid.FindPath (searchFromCell, searchToCell);
+			}
+			else if (searchFromCell && searchFromCell != currentCell) {
+				searchToCell = currentCell;
+				grid.FindPath (searchFromCell, searchToCell);
+			}
 			antePreviousCell = previousCell;
 			previousCell = currentCell;
 		} else {
