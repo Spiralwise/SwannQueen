@@ -49,6 +49,7 @@
      <Compile Include="Assets\ListPool.cs" />
      <Compile Include="Assets\Scripts\CameraController.cs" />
      <Compile Include="Assets\Scripts\HexCell.cs" />
+     <Compile Include="Assets\Scripts\HexCellPriorityQueue.cs" />
      <Compile Include="Assets\Scripts\HexFeatureCollection.cs" />
      <Compile Include="Assets\Scripts\HexFeatureManager.cs" />
      <Compile Include="Assets\Scripts\HexGrid.cs" />

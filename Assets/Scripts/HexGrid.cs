@@ -23,6 +23,8 @@ public class HexGrid : MonoBehaviour {
 	HexCell[] cells;
 	HexGridChunk[] chunks;
 
+	HexCellPriorityQueue searchFrontier;
+
 	public void Awake () {
 		terrainMaterial.DisableKeyword ("GRID_ON");
 		HexMetrics.noiseSource = noiseSource;
@@ -169,6 +171,10 @@ public class HexGrid : MonoBehaviour {
 	}
 
 	IEnumerator Search (HexCell fromCell, HexCell toCell) {
+		if (searchFrontier == null)
+			searchFrontier = new HexCellPriorityQueue ();
+		else
+			searchFrontier.Clear ();
 		for (int i = 0; i < cells.Length; i++) {
 			cells [i].Distance = int.MaxValue;
 			cells [i].DisableOutline ();
@@ -176,13 +182,11 @@ public class HexGrid : MonoBehaviour {
 		fromCell.EnableOutline (Color.blue);
 		toCell.EnableOutline (Color.red);
 		WaitForSeconds delay = new WaitForSeconds (1 / 60f);
-		List<HexCell> openSet = new List<HexCell> ();
 		fromCell.Distance = 0;
-		openSet.Add (fromCell);
-		while (openSet.Count > 0) {
+		searchFrontier.Enqueue (fromCell);
+		while (searchFrontier.Count > 0) {
 			yield return delay;
-			HexCell current = openSet [0];
-			openSet.RemoveAt (0);
+			HexCell current = searchFrontier.Dequeue ();
 			if (current == toCell) {
 				current = current.PathFrom;
 				while (current != fromCell) {
@@ -214,12 +218,14 @@ public class HexGrid : MonoBehaviour {
 				if (neighbor.Distance == int.MaxValue) {
 					neighbor.Distance = distance;
 					neighbor.PathFrom = current;
-					openSet.Add (neighbor);
+					neighbor.SearchHeuristic = neighbor.coordinates.DistanceTo (toCell.coordinates);
+					searchFrontier.Enqueue (neighbor);
 				} else if (distance < neighbor.Distance) {
+					int oldPriority = neighbor.SearchPriority;
 					neighbor.Distance = distance;
 					neighbor.PathFrom = current;
+					searchFrontier.Change (neighbor, oldPriority);
 				}
-				openSet.Sort ((x, y) => x.Distance.CompareTo (y.Distance));
 			} // TODO (2017-10-01) How about rivers?
 		}
 	}
