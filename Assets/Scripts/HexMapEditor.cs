@@ -57,16 +57,20 @@ public class HexMapEditor : MonoBehaviour {
 			if (editMode)
 				EditCells (currentCell);
 			else if (Input.GetKey(KeyCode.LeftShift) && searchToCell != currentCell) {
-				if (searchFromCell)
-					searchFromCell.DisableOutline ();
-				searchFromCell = currentCell;
-				searchFromCell.EnableOutline (Color.blue);
-				if (searchToCell)
-					grid.FindPath (searchFromCell, searchToCell);
+				if (searchFromCell != currentCell) {
+					if (searchFromCell)
+						searchFromCell.DisableOutline ();
+					searchFromCell = currentCell;
+					searchFromCell.EnableOutline (Color.blue);
+					if (searchToCell)
+						grid.FindPath (searchFromCell, searchToCell, 24);
+				}
 			}
 			else if (searchFromCell && searchFromCell != currentCell) {
-				searchToCell = currentCell;
-				grid.FindPath (searchFromCell, searchToCell);
+				if (searchToCell != currentCell) {
+					searchToCell = currentCell;
+					grid.FindPath (searchFromCell, searchToCell, 24);
+				}
 			}
 			antePreviousCell = previousCell;
 			previousCell = currentCell;

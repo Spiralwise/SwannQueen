@@ -1,10 +1,11 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\HexCell.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\HexGrid.cs">
     <Files>
-      <File FileName="Assets\Scripts\HexGrid.cs" Line="168" Column="46" />
-      <File FileName="Assets\Scripts\HexMapEditor.cs" Line="66" Column="18" />
-      <File FileName="Assets\Scripts\HexCell.cs" Line="84" Column="7" />
+      <File FileName="Assets\Scripts\HexGrid.cs" Line="229" Column="1" />
+      <File FileName="Assets\Scripts\HexMapEditor.cs" Line="59" Column="75" />
+      <File FileName="Assets\Scripts\HexCell.cs" Line="100" Column="7" />
+      <File FileName="Assets\Scripts\HexCellPriorityQueue.cs" Line="52" Column="14" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
