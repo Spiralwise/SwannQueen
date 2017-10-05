@@ -47,6 +47,12 @@ public class HexGrid : MonoBehaviour {
 		}
 	}
 
+	public bool HasPath {
+		get {
+			return currentPathExists;
+		}
+	}
+
 	public bool CreateMap (int x, int y) {
 		ClearPath ();
 		ClearUnits ();
@@ -174,6 +180,13 @@ public class HexGrid : MonoBehaviour {
 		//Debug.Log ("touched at " + targetCoordinates.toString ());
 	}
 
+	public HexCell GetCell (Ray ray) {
+		RaycastHit hit;
+		if (Physics.Raycast (ray, out hit))
+			return GetCell (hit.point);
+		return null;
+	}
+
 	public HexCell GetCell (HexCoordinates coordinates) {
 		int y = coordinates.Y;
 		if (y < 0 || y >= cellCountY)
@@ -224,7 +237,7 @@ public class HexGrid : MonoBehaviour {
 		}
 	}
 
-	void ClearPath () {
+	public void ClearPath () {
 		if (currentPathExists) {
 			HexCell current = currentPathTo;
 			while (current != currentPathFrom) {
@@ -256,6 +269,8 @@ public class HexGrid : MonoBehaviour {
 			for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++) {
 				HexCell neighbor = current.GetNeighbor (d);
 				if (neighbor == null || neighbor.SearchPhase > searchFrontierPhase)
+					continue;
+				if (neighbor.Unit)
 					continue;
 				if (neighbor.IsUnderWater)
 					continue;

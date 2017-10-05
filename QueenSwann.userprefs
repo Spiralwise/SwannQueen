@@ -2,9 +2,13 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\HexGrid.cs">
     <Files>
-      <File FileName="Assets\Scripts\HexGrid.cs" Line="177" Column="20" />
-      <File FileName="Assets\Scripts\HexMapEditor.cs" Line="70" Column="39" />
-      <File FileName="Assets\Scripts\HexCell.cs" Line="22" Column="15" />
+      <File FileName="Assets\Scripts\HexGrid.cs" Line="274" Column="15" />
+      <File FileName="Assets\Scripts\HexMapEditor.cs" Line="80" Column="37" />
+      <File FileName="Assets\Scripts\HexCell.cs" Line="473" Column="3" />
+      <File FileName="Assets\Scripts\HexUnit.cs" Line="17" Column="26" />
+      <File FileName="Assets\Scripts\HexMetrics.cs" Line="275" Column="12" />
+      <File FileName="Assets\Scripts\Menu\SaveMapMenu.cs" Line="95" Column="42" />
+      <File FileName="Assets\Scripts\HexGameUI.cs" Line="19" Column="6" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

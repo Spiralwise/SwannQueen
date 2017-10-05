@@ -9,11 +9,8 @@ public class HexMapEditor : MonoBehaviour {
 	public HexGrid grid;
 	public CanvasGroup editorPanel;
 
-	bool editMode;
-
 	bool isDrag;
 	HexDirection dragDirection;
-	HexCell searchFromCell, searchToCell;
 	HexCell previousCell;
 	HexCell antePreviousCell;
 
@@ -34,6 +31,10 @@ public class HexMapEditor : MonoBehaviour {
 	OptionalToggle riverMode;
 	OptionalToggle roadMode;
 	OptionalToggle walledMode;
+
+	void Awake () {
+		SetEditMode (false);
+	}
 
 	void Update () {
 		if (!EventSystem.current.IsPointerOverGameObject ()) {
@@ -62,24 +63,9 @@ public class HexMapEditor : MonoBehaviour {
 				ValidateDrag (currentCell);
 			else
 				isDrag = false;
-			if (editMode)
-				EditCells (currentCell);
-			else if (Input.GetKey(KeyCode.LeftShift) && searchToCell != currentCell) {
-				if (searchFromCell != currentCell) {
-					if (searchFromCell)
-						searchFromCell.DisableOutline ();
-					searchFromCell = currentCell;
-					searchFromCell.EnableOutline (Color.blue);
-					if (searchToCell)
-						grid.FindPath (searchFromCell, searchToCell, 24);
-				}
-			}
-			else if (searchFromCell && searchFromCell != currentCell) {
-				if (searchToCell != currentCell) {
-					searchToCell = currentCell;
-					grid.FindPath (searchFromCell, searchToCell, 24);
-				}
-			}
+			
+			EditCells (currentCell);
+
 			antePreviousCell = previousCell;
 			previousCell = currentCell;
 		} else {
@@ -89,10 +75,9 @@ public class HexMapEditor : MonoBehaviour {
 	}
 
 	public void SetEditMode (bool toggle) {
-		editMode = toggle;
-		grid.ShowUI (!toggle);
-		editorPanel.blocksRaycasts = toggle;
+		enabled = toggle;
 		editorPanel.alpha = toggle ? 1.0f : 0.0f;
+		editorPanel.interactable = toggle;
 	}
 
 	public void SetTerrainTypeIndex (int index) {
@@ -168,11 +153,7 @@ public class HexMapEditor : MonoBehaviour {
 	}
 
 	HexCell GetCellUnderCursor () {
-		Ray inputRay = Camera.main.ScreenPointToRay (Input.mousePosition);
-		RaycastHit hit;
-		if (Physics.Raycast (inputRay, out hit))
-			return grid.GetCell (hit.point);
-		return null;
+		return grid.GetCell (Camera.main.ScreenPointToRay (Input.mousePosition));
 	}
 
 	void EditCell (HexCell cell) {

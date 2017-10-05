@@ -13,6 +13,8 @@ public class HexUnit : MonoBehaviour {
 			return location;
 		}
 		set {
+			if (location)
+				location.Unit = null;
 			location = value;
 			value.Unit = this;
 			transform.localPosition = value.Position;
@@ -27,6 +29,10 @@ public class HexUnit : MonoBehaviour {
 			orientation = value;
 			transform.localRotation = Quaternion.Euler (0f, value, 0f);
 		}
+	}
+
+	public bool IsValidDestination (HexCell cell) {
+		return !cell.IsUnderWater && !cell.Unit;
 	}
 
 	public void ValidateLocation () {
