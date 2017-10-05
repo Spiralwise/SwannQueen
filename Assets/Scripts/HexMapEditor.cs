@@ -8,7 +8,6 @@ public class HexMapEditor : MonoBehaviour {
 
 	public HexGrid grid;
 	public CanvasGroup editorPanel;
-	public HexUnit unitPrefab;
 
 	bool editMode;
 
@@ -238,17 +237,14 @@ public class HexMapEditor : MonoBehaviour {
 	void CreateUnit () {
 		HexCell cell = GetCellUnderCursor ();
 		if (cell && !cell.Unit) {
-			HexUnit unit = Instantiate (unitPrefab);
-			unit.transform.SetParent (grid.transform, false);
-			unit.Location = cell;
-			unit.Orientation = Random.Range (0f, 360f);
+			grid.AddUnit (Instantiate (HexUnit.unitPrefab), cell, Random.Range (0f, 360f));
 		}
 	}
 
 	void DestroyUnit () {
 		HexCell cell = GetCellUnderCursor ();
 		if (cell && cell.Unit)
-			cell.Unit.Die ();
+			grid.RemoveUnit (cell.Unit);
 	}
 
 	void ValidateDrag (HexCell currentCell) {

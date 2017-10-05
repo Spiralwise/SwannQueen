@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class SaveMapMenu : MonoBehaviour {
 
+	const int FileFormatVersion = 2;
+
 	public HexGrid grid;
 	public Text menuLabel, actionButtonLabel;
 	public InputField nameInput;
@@ -82,7 +84,7 @@ public class SaveMapMenu : MonoBehaviour {
 
 	void Save (string path) {
 		using (BinaryWriter writer = new BinaryWriter (File.Open (path, FileMode.Create))) {
-			writer.Write (1);
+			writer.Write (FileFormatVersion);
 			grid.Save (writer);
 			Debug.Log ("Map saved to " + path + ".");
 		}
@@ -95,7 +97,7 @@ public class SaveMapMenu : MonoBehaviour {
 		}
 		using (BinaryReader reader = new BinaryReader(File.OpenRead(path))) {
 			int header = reader.ReadInt32 ();
-			if (header <= 1) {
+			if (header <= FileFormatVersion) {
 				grid.Load (reader, header);
 				CameraController.ValidatePosition ();
 				Debug.Log ("Map loaded from " + path + " (Version: " + header + ").");

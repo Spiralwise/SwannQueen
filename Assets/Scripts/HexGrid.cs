@@ -14,6 +14,7 @@ public class HexGrid : MonoBehaviour {
 	public HexGridChunk chunkPrefab;
 	public Texture2D noiseSource;
 	public int seed;
+	public HexUnit unitPrefab;
 
 	public Text hexLabelPrefab;
 
@@ -22,6 +23,7 @@ public class HexGrid : MonoBehaviour {
 	int chunkCountX, chunkCountY;
 	HexCell[] cells;
 	HexGridChunk[] chunks;
+	List<HexUnit> units = new List<HexUnit> ();
 
 	HexCell currentPathFrom, currentPathTo;
 	bool currentPathExists;
@@ -32,6 +34,7 @@ public class HexGrid : MonoBehaviour {
 		terrainMaterial.DisableKeyword ("GRID_ON");
 		HexMetrics.noiseSource = noiseSource;
 		HexMetrics.InitializeHashGrid (seed);
+		HexUnit.unitPrefab = unitPrefab;
 
 		CreateMap (cellCountX, cellCountY);
 	}
@@ -40,11 +43,13 @@ public class HexGrid : MonoBehaviour {
 		if (!HexMetrics.noiseSource) {
 			HexMetrics.noiseSource = noiseSource;
 			HexMetrics.InitializeHashGrid (seed);
+			HexUnit.unitPrefab = unitPrefab;
 		}
 	}
 
 	public bool CreateMap (int x, int y) {
 		ClearPath ();
+		ClearUnits ();
 		if (x <= 0 || x % HexMetrics.chunkSizeX != 0
 		    || y <= 0 || y % HexMetrics.chunkSizeY != 0) {
 			Debug.LogError ("Can't create a new map: Unsupported map size.");
@@ -67,10 +72,14 @@ public class HexGrid : MonoBehaviour {
 		writer.Write (cellCountY);
 		for (int c = 0; c < cells.Length; c++)
 			cells [c].Save (writer);
+		writer.Write (units.Count);
+		for (int u = 0; u < units.Count; u++)
+			units [u].Save (writer);
 	}
 
 	public void Load (BinaryReader reader, int header) {
 		ClearPath ();
+		ClearUnits ();
 		int x = 20, y = 15;
 		if (header >= 1) {
 			x = reader.ReadInt32 ();
@@ -83,6 +92,12 @@ public class HexGrid : MonoBehaviour {
 			cells [c].Load (reader);
 		for (int c = 0; c < chunks.Length; c++)
 			chunks [c].Refresh ();
+
+		if (header >= 2) {
+			int unitCount = reader.ReadInt32 ();
+			for (int i = 0; i < unitCount; i++)
+				HexUnit.Load (reader, this);
+		}
 	}
 
 	public void ShowGrid (bool visible) {
@@ -167,6 +182,24 @@ public class HexGrid : MonoBehaviour {
 		if (x < 0 || x >= cellCountX)
 			return null;
 		return cells [x + y * cellCountX];
+	}
+
+	public void AddUnit (HexUnit unit, HexCell location, float orientation) {
+		units.Add (unit);
+		unit.transform.SetParent (transform, false);
+		unit.Location = location;
+		unit.Orientation = orientation;
+	}
+
+	public void RemoveUnit (HexUnit unit) {
+		units.Remove (unit);
+		unit.Die ();
+	}
+
+	void ClearUnits () {
+		for (int i = 0; i < units.Count; i++)
+			units [i].Die ();
+		units.Clear ();
 	}
 
 	public void FindPath (HexCell fromCell, HexCell toCell, int speed) {

@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.IO;
+using UnityEngine;
+
 
 public static class HexMetrics {
 
@@ -259,5 +261,17 @@ public struct HexCoordinates {
 
 	public string ToStringOnSeparateLines () {
 		return X.ToString () + "\n" + Z.ToString () + "\n" + Y.ToString ();
+	}
+
+	public void Save (BinaryWriter writer) {
+		writer.Write (x);
+		writer.Write (y);
+	}
+
+	public static HexCoordinates Load (BinaryReader reader) {
+		HexCoordinates c;
+		c.x = reader.ReadInt32 ();
+		c.y = reader.ReadInt32 ();
+		return c;
 	}
 }
