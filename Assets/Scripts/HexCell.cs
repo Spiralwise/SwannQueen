@@ -79,6 +79,11 @@ public class HexCell : MonoBehaviour {
 			roads [i] = (roadFlags & (1 << i)) != 0;
 	}
 
+	public HexUnit Unit {
+		get;
+		set;
+	}
+
 	public HexCell PathFrom {
 		get;
 		set;
@@ -440,11 +445,15 @@ public class HexCell : MonoBehaviour {
 				if (neighbor != null && neighbor.chunk != chunk)
 					neighbor.chunk.Refresh ();
 			}
+			if (Unit)
+				Unit.ValidateLocation ();
 		}
 	}
 
 	void RefreshSelf () {
 		chunk.Refresh ();
+		if (Unit)
+			Unit.ValidateLocation ();
 	}
 
 	void RefreshPosition () {

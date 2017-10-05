@@ -8,6 +8,7 @@ public class HexMapEditor : MonoBehaviour {
 
 	public HexGrid grid;
 	public CanvasGroup editorPanel;
+	public HexUnit unitPrefab;
 
 	bool editMode;
 
@@ -36,19 +37,27 @@ public class HexMapEditor : MonoBehaviour {
 	OptionalToggle walledMode;
 
 	void Update () {
-		if (Input.GetMouseButton (1) && !EventSystem.current.IsPointerOverGameObject ())
-			HandleInput ();
-		else {
-			previousCell = null;
-			antePreviousCell = null;
+		if (!EventSystem.current.IsPointerOverGameObject ()) {
+			if (Input.GetMouseButton (0)) {
+				HandleInput ();
+			}
+			else if (Input.GetKeyDown (KeyCode.U)) {
+				if (Input.GetKey (KeyCode.LeftShift))
+					DestroyUnit ();
+				else
+					CreateUnit ();
+			}
+			else {
+				previousCell = null;
+				antePreviousCell = null;
+			}
 		}
+
 	}
 
 	void HandleInput () {
-		Ray inputRay = Camera.main.ScreenPointToRay (Input.mousePosition);
-		RaycastHit hit;
-		if (Physics.Raycast (inputRay, out hit)) {
-			HexCell currentCell = grid.GetCell (hit.point);
+		HexCell currentCell = GetCellUnderCursor ();
+		if (currentCell) {
 			if (previousCell && previousCell != currentCell 
 				&& (!antePreviousCell || antePreviousCell != currentCell))
 				ValidateDrag (currentCell);
@@ -159,6 +168,14 @@ public class HexMapEditor : MonoBehaviour {
 		grid.ShowUI (visible);
 	}
 
+	HexCell GetCellUnderCursor () {
+		Ray inputRay = Camera.main.ScreenPointToRay (Input.mousePosition);
+		RaycastHit hit;
+		if (Physics.Raycast (inputRay, out hit))
+			return grid.GetCell (hit.point);
+		return null;
+	}
+
 	void EditCell (HexCell cell) {
 		if (cell) {
 			if (activeTerrainTypeIndex >= 0)
@@ -216,6 +233,22 @@ public class HexMapEditor : MonoBehaviour {
 			for (int x = centerX - brushSize; x <= centerX + r; x++)
 				EditCell (grid.GetCell (new HexCoordinates (x, y)));
 		}
+	}
+
+	void CreateUnit () {
+		HexCell cell = GetCellUnderCursor ();
+		if (cell && !cell.Unit) {
+			HexUnit unit = Instantiate (unitPrefab);
+			unit.transform.SetParent (grid.transform, false);
+			unit.Location = cell;
+			unit.Orientation = Random.Range (0f, 360f);
+		}
+	}
+
+	void DestroyUnit () {
+		HexCell cell = GetCellUnderCursor ();
+		if (cell && cell.Unit)
+			cell.Unit.Die ();
 	}
 
 	void ValidateDrag (HexCell currentCell) {

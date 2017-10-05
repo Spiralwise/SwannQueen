@@ -58,6 +58,7 @@
      <Compile Include="Assets\Scripts\HexMapEditor.cs" />
      <Compile Include="Assets\Scripts\HexMesh.cs" />
      <Compile Include="Assets\Scripts\HexMetrics.cs" />
+     <Compile Include="Assets\Scripts\HexUnit.cs" />
      <Compile Include="Assets\Scripts\Menu\NewMapMenu.cs" />
      <Compile Include="Assets\Scripts\Menu\SaveItem.cs" />
      <Compile Include="Assets\Scripts\Menu\SaveMapMenu.cs" />
