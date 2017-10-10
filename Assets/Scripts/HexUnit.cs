@@ -87,6 +87,8 @@ public class HexUnit : MonoBehaviour {
 		}
 		transform.localPosition = location.Position;
 		orientation = transform.localRotation.eulerAngles.y;
+		ListPool<HexCell>.Add (pathToTravel);
+		pathToTravel = null;
 	}
 
 	IEnumerator LookAt(Vector3 point) {
@@ -121,7 +123,7 @@ public class HexUnit : MonoBehaviour {
 			transform.localPosition = location.Position;
 	}
 
-	void OnDrawGizmos () {
+	/*void OnDrawGizmos () {
 		if (pathToTravel == null || pathToTravel.Count == 0)
 			return;
 		Vector3 a, b, c = pathToTravel [0].Position;
@@ -137,5 +139,5 @@ public class HexUnit : MonoBehaviour {
 		c = b;
 		for (float t = 0f; t < 1f; t += 0.1f)
 			Gizmos.DrawSphere (Beziers.GetPoint(a, b, c, t), 2f);
-	}
+	}*/
 }
