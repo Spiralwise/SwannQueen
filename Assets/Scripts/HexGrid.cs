@@ -345,13 +345,6 @@ public class HexGrid : MonoBehaviour {
 				HexCell neighbor = current.GetNeighbor (d);
 				if (neighbor == null || neighbor.SearchPhase > searchFrontierPhase)
 					continue;
-				if (neighbor.Unit)
-					continue;
-				if (neighbor.IsUnderWater)
-					continue;
-				HexEdgeType edgeType = current.GetEdgeType (neighbor);
-				if (edgeType == HexEdgeType.Cliff)
-					continue;
 
 				int distance = current.Distance + 1;
 				if (distance > range)

@@ -12,6 +12,7 @@ public class HexUnit : MonoBehaviour {
 	public static HexUnit unitPrefab;
 
 	HexCell location;
+	HexCell currentTravelLocation;
 	float orientation;
 	List<HexCell> pathToTravel;
 
@@ -63,7 +64,9 @@ public class HexUnit : MonoBehaviour {
 	}
 
 	public void Travel (List<HexCell> path) {
-		Location = path [path.Count - 1];
+		location.Unit = null;
+		location = path [path.Count - 1];
+		location.Unit = this;
 		pathToTravel = path;
 		StopAllCoroutines ();
 		StartCoroutine (TravelPath ());
@@ -71,13 +74,15 @@ public class HexUnit : MonoBehaviour {
 
 	IEnumerator TravelPath () {
 		Vector3 a, b, c = pathToTravel [0].Position;
-		transform.localPosition = c;
 		yield return LookAt (pathToTravel [1].Position);
+		Grid.DecreaseVisibility (currentTravelLocation ? currentTravelLocation : pathToTravel [0], visionRange);
 		float t = Time.deltaTime * travelSpeed;
 		for (int i = 1; i < pathToTravel.Count; i++) {
+			currentTravelLocation = pathToTravel [i];
 			a = c;
 			b = pathToTravel [i - 1].Position;
-			c = (b + pathToTravel [i].Position) * 0.5f;
+			c = (b + currentTravelLocation.Position) * 0.5f;
+			Grid.IncreaseVisibility (pathToTravel [i], visionRange);
 			for (; t < 1f; t += Time.deltaTime * travelSpeed) {
 				transform.localPosition = Beziers.GetPoint(a, b, c, t);
 				Vector3 d = Beziers.GetDerivative (a, b, c, t);
@@ -85,11 +90,14 @@ public class HexUnit : MonoBehaviour {
 				transform.localRotation = Quaternion.LookRotation (d);
 				yield return null;
 			}
+			Grid.DecreaseVisibility (pathToTravel [i], visionRange);
 			t -= 1f;
 		}
+		currentTravelLocation = null;
 		a = c;
-		b = pathToTravel [pathToTravel.Count - 1].Position;
+		b = location.Position;
 		c = b;
+		Grid.IncreaseVisibility (location, visionRange);
 		for (; t < 1f; t += Time.deltaTime * travelSpeed) {
 			transform.localPosition = Beziers.GetPoint(a, b, c, t);
 			Vector3 d = Beziers.GetDerivative (a, b, c, t);
@@ -131,8 +139,14 @@ public class HexUnit : MonoBehaviour {
 	}
 
 	void OnEnable() {
-		if (location)
+		if (location) {
 			transform.localPosition = location.Position;
+			if (currentTravelLocation) {
+				Grid.IncreaseVisibility (location, visionRange);
+				Grid.DecreaseVisibility (currentTravelLocation, visionRange);
+				currentTravelLocation = null;
+			}
+		}
 	}
 
 	/*void OnDrawGizmos () {
