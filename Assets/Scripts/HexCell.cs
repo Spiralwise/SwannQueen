@@ -10,6 +10,7 @@ public class HexCell : MonoBehaviour {
 	public HexCoordinates coordinates;
 	public RectTransform uiRect;
 
+	int visibility;
 	int elevation = int.MinValue;
 	int urbanLevel, farmLevel, plantLevel;
 	int specialIndex;
@@ -88,6 +89,24 @@ public class HexCell : MonoBehaviour {
 	public HexUnit Unit {
 		get;
 		set;
+	}
+
+	public bool IsVisible {
+		get {
+			return visibility > 0;
+		}
+	}
+
+	public void IncreaseVisibility () {
+		visibility++;
+		if (visibility == 1)
+			ShaderData.RefreshVisibility (this);
+	}
+
+	public void DecreaseVisibility () {
+		visibility--;
+		if (visibility == 0)
+			ShaderData.RefreshVisibility (this);
 	}
 
 	public HexCell PathFrom {

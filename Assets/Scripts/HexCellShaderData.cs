@@ -23,6 +23,11 @@ public class HexCellShaderData : MonoBehaviour {
 		enabled = true;
 	}
 
+	public void RefreshVisibility (HexCell cell) {
+		cellTextureData [cell.Index].r = cell.IsVisible ? (byte)255 : (byte)0;
+		enabled = true;
+	}
+
 	public void RefreshTerrain (HexCell cell) {
 		cellTextureData [cell.Index].a = (byte)cell.TerrainTypeIndex;
 		enabled = true;

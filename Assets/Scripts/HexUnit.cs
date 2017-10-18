@@ -7,6 +7,7 @@ public class HexUnit : MonoBehaviour {
 
 	const float travelSpeed = 3f;
 	const float rotationSpeed = 180f;
+	const int visionRange = 3;
 
 	public static HexUnit unitPrefab;
 
@@ -19,10 +20,13 @@ public class HexUnit : MonoBehaviour {
 			return location;
 		}
 		set {
-			if (location)
+			if (location) {
+				Grid.DecreaseVisibility (location, visionRange);
 				location.Unit = null;
+			}
 			location = value;
 			value.Unit = this;
+			Grid.IncreaseVisibility (value, visionRange);
 			transform.localPosition = value.Position;
 		}
 	}
@@ -37,6 +41,11 @@ public class HexUnit : MonoBehaviour {
 		}
 	}
 
+	public HexGrid Grid {
+		get;
+		set;
+	}
+
 	public bool IsValidDestination (HexCell cell) {
 		return !cell.IsUnderWater && !cell.Unit;
 	}
@@ -46,7 +55,10 @@ public class HexUnit : MonoBehaviour {
 	}
 
 	public void Die () {
-		location.Unit = null;
+		if (location) {
+			Grid.DecreaseVisibility (location, visionRange);
+			location.Unit = null;
+		}
 		Destroy (gameObject);
 	}
 
