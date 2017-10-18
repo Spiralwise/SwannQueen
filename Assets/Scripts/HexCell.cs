@@ -54,6 +54,7 @@ public class HexCell : MonoBehaviour {
 
 	public void Load (BinaryReader reader) {
 		terrainTypeIndex = reader.ReadByte ();
+		ShaderData.RefreshTerrain (this);
 		elevation = reader.ReadByte ();
 		RefreshPosition ();
 		waterLevel = reader.ReadByte ();
@@ -77,6 +78,11 @@ public class HexCell : MonoBehaviour {
 		int roadFlags = reader.ReadByte ();
 		for (int i = 0; i < roads.Length; i++)
 			roads [i] = (roadFlags & (1 << i)) != 0;
+	}
+
+	public int Index {
+		get;
+		set;
 	}
 
 	public HexUnit Unit {
@@ -197,7 +203,7 @@ public class HexCell : MonoBehaviour {
 		set {
 			if (terrainTypeIndex != value) {
 				terrainTypeIndex = value;
-				Refresh ();
+				ShaderData.RefreshTerrain (this);
 			}
 		}
 	}
@@ -215,6 +221,11 @@ public class HexCell : MonoBehaviour {
 		set {
 			distance = value;
 		}
+	}
+
+	public HexCellShaderData ShaderData {
+		get;
+		set;
 	}
 
 	public bool HasRiver {

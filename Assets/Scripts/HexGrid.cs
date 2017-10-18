@@ -30,12 +30,14 @@ public class HexGrid : MonoBehaviour {
 	HexCellPriorityQueue searchFrontier;
 	int searchFrontierPhase;
 
+	HexCellShaderData cellShaderData;
+
 	public void Awake () {
 		terrainMaterial.DisableKeyword ("GRID_ON");
 		HexMetrics.noiseSource = noiseSource;
 		HexMetrics.InitializeHashGrid (seed);
 		HexUnit.unitPrefab = unitPrefab;
-
+		cellShaderData = gameObject.AddComponent<HexCellShaderData> ();
 		CreateMap (cellCountX, cellCountY);
 	}
 
@@ -68,6 +70,7 @@ public class HexGrid : MonoBehaviour {
 		cellCountY = y;
 		chunkCountX = cellCountX / HexMetrics.chunkSizeX;
 		chunkCountY = cellCountY / HexMetrics.chunkSizeY;
+		cellShaderData.Initialize (x, y);
 		CreateChunks ();
 		CreateCells ();
 		return true;
@@ -146,7 +149,9 @@ public class HexGrid : MonoBehaviour {
 		position.y = 0f;
 		position.z = y * 1.5f * HexMetrics.outterRadius;
 		HexCell localCell = cells[i] = Instantiate<HexCell> (hexPrefab);
+		localCell.Index = i;
 		localCell.coordinates = HexCoordinates.FromOffsetCoordinates (x, y);
+		localCell.ShaderData = cellShaderData;
 		localCell.transform.position = position;
 
 		Text localLabel = Instantiate<Text> (hexLabelPrefab);

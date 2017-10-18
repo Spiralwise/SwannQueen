@@ -1,11 +1,14 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\HexUnit.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\HexMapEditor.cs">
     <Files>
-      <File FileName="Assets\Scripts\HexGrid.cs" Line="220" Column="16" />
-      <File FileName="Assets\Scripts\HexUnit.cs" Line="91" Column="23" />
-      <File FileName="Assets\Scripts\HexGameUI.cs" Line="57" Column="42" />
-      <File FileName="Assets\Scripts\Beziers.cs" Line="11" Column="50" />
+      <File FileName="Assets\Scripts\HexGrid.cs" Line="73" Column="34" />
+      <File FileName="Assets\Scripts\HexCellShaderData.cs" Line="26" Column="28" />
+      <File FileName="Assets\Scripts\HexMesh.cs" Line="152" Column="35" />
+      <File FileName="Assets\Shaders\HexCellData.cginc" Line="12" Column="14" />
+      <File FileName="Assets\Shaders\HexShader.shader" Line="52" Column="18" />
+      <File FileName="Assets\Scripts\HexCell.cs" Line="206" Column="16" />
+      <File FileName="Assets\Scripts\HexMapEditor.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
