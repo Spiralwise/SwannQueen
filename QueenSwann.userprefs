@@ -1,14 +1,13 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\HexMapEditor.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\HexUnit.cs">
     <Files>
-      <File FileName="Assets\Scripts\HexGrid.cs" Line="73" Column="34" />
-      <File FileName="Assets\Scripts\HexCellShaderData.cs" Line="26" Column="28" />
-      <File FileName="Assets\Scripts\HexMesh.cs" Line="152" Column="35" />
-      <File FileName="Assets\Shaders\HexCellData.cginc" Line="12" Column="14" />
-      <File FileName="Assets\Shaders\HexShader.shader" Line="52" Column="18" />
-      <File FileName="Assets\Scripts\HexCell.cs" Line="206" Column="16" />
-      <File FileName="Assets\Scripts\HexMapEditor.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\HexGrid.cs" Line="347" Column="15" />
+      <File FileName="Assets\Scripts\HexCell.cs" Line="97" Column="4" />
+      <File FileName="Assets\Scripts\HexMapEditor.cs" Line="221" Column="12" />
+      <File FileName="Assets\Scripts\HexMetrics.cs" Line="223" Column="1" />
+      <File FileName="Assets\Scripts\HexCellShaderData.cs" Line="28" Column="18" />
+      <File FileName="Assets\Scripts\HexUnit.cs" Line="149" Column="4" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
