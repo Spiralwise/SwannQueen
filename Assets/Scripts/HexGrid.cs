@@ -98,7 +98,7 @@ public class HexGrid : MonoBehaviour {
 			return;
 		
 		for (int c = 0; c < cells.Length; c++)
-			cells [c].Load (reader);
+			cells [c].Load (reader, header);
 		for (int c = 0; c < chunks.Length; c++)
 			chunks [c].Refresh ();
 

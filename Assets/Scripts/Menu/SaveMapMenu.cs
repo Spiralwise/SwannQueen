@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class SaveMapMenu : MonoBehaviour {
 
-	const int FileFormatVersion = 2;
+	const int FileFormatVersion = 3;
 
 	public HexGrid grid;
 	public Text menuLabel, actionButtonLabel;

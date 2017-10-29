@@ -28,7 +28,7 @@
 			float3 worldPos;
 			float4 color : COLOR;
 			float3 terrain;
-			float3 visibility;
+			float4 visibility;
 		};
 
 		half _Glossiness;
@@ -56,7 +56,8 @@
 			data.visibility.x = cell0.x;
 			data.visibility.y = cell1.x;
 			data.visibility.z = cell2.x;
-			data.visibility = lerp(0.25, 1, data.visibility);
+			data.visibility.xyz = lerp(0.25, 1, data.visibility.xyz);
+			data.visibility.w = cell0.y * v.color.x + cell1.y * v.color.y + cell2.y * v.color.z;
 		}
 
 		float4 GetTerrainColor (Input IN, int index) {
@@ -74,7 +75,8 @@
 				gridUV.y *= 1 / 30.0;
 				grid = tex2D(_GridTex, gridUV);
 			#endif
-			o.Albedo = c.rgb * _Color * grid;
+			float explored = IN.visibility.w;
+			o.Albedo = c.rgb * _Color * grid * explored;
 			// Metallic and smoothness come from slider variables
 			o.Metallic = _Metallic;
 			o.Smoothness = _Glossiness;
