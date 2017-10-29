@@ -42,13 +42,19 @@ public class HexUnit : MonoBehaviour {
 		}
 	}
 
+	public int Speed {
+		get {
+			return 24;
+		}
+	}
+
 	public HexGrid Grid {
 		get;
 		set;
 	}
 
 	public bool IsValidDestination (HexCell cell) {
-		return !cell.IsUnderWater && !cell.Unit;
+		return cell.IsExplored && !cell.IsUnderWater && !cell.Unit;
 	}
 
 	public void ValidateLocation () {
@@ -109,6 +115,22 @@ public class HexUnit : MonoBehaviour {
 		orientation = transform.localRotation.eulerAngles.y;
 		ListPool<HexCell>.Add (pathToTravel);
 		pathToTravel = null;
+	}
+
+	public int GetMoveCost (HexCell fromCell, HexCell toCell, HexDirection direction) {
+		HexEdgeType edgeType = fromCell.GetEdgeType (toCell);
+		if (edgeType == HexEdgeType.Cliff)
+			return -1;
+		int moveCost;
+		if (fromCell.HasRoadThroughEdge (direction))
+			moveCost = 1;
+		else if (fromCell.Walled != toCell.Walled)
+			return -1;
+		else {
+			moveCost = edgeType == HexEdgeType.Flat ? 5 : 10;
+			moveCost += toCell.UrbanLevel + toCell.FarmLevel + toCell.PlantLevel;
+		}
+		return moveCost;
 	}
 
 	IEnumerator LookAt(Vector3 point) {

@@ -1,12 +1,11 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Shaders\WaterShader.shader">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Shaders\RoadShader.shader">
     <Files>
-      <File FileName="Assets\Scripts\HexGridChunk.cs" Line="627" Column="20" />
-      <File FileName="Assets\Shaders\RoadShader.shader" Line="19" Column="3" />
-      <File FileName="Assets\Scripts\HexMesh.cs" Line="95" Column="2" />
-      <File FileName="Assets\Shaders\WaterShader.shader" Line="54" Column="21" />
-      <File FileName="Assets\Shaders\WaterShoreShader.shader" Line="1" Column="1" />
+      <File FileName="Assets\Shaders\FeatureShader.shader" Line="65" Column="4" />
+      <File FileName="Assets\Shaders\EstuariesShader.shader" Line="68" Column="38" />
+      <File FileName="Assets\Shaders\RiverShader.shader" Line="55" Column="37" />
+      <File FileName="Assets\Shaders\RoadShader.shader" Line="65" Column="4" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
