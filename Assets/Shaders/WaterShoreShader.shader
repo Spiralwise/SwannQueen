@@ -11,18 +11,20 @@
 		
 		CGPROGRAM
 		// Physically based Standard lighting model, and enable shadows on all light types
-		#pragma surface surf Standard alpha
+		#pragma surface surf Standard alpha vertex:vert
 
 		// Use shader model 3.0 target, to get nicer looking lighting
 		#pragma target 3.0
 
 		#include "HexShader.cginc"
+		#include "HexCellData.cginc"
 
 		sampler2D _MainTex;
 
 		struct Input {
 			float2 uv_MainTex;
 			float3 worldPos;
+			float visibility;
 		};
 
 		half _Glossiness;
@@ -36,6 +38,15 @@
 			// put more per-instance properties here
 		UNITY_INSTANCING_CBUFFER_END
 
+		void vert (inout appdata_full v, out Input data) {
+			UNITY_INITIALIZE_OUTPUT(Input, data);
+			float4 cell0 = GetCellData(v, 0);
+			float4 cell1 = GetCellData(v, 1);
+			float4 cell2 = GetCellData(v, 2);
+			data.visibility = cell0.x * v.color.x + cell1.x * v.color.y + cell2.x * v.color.z;
+			data.visibility = lerp(0.25, 1, data.visibility);
+		}
+
 		void surf (Input IN, inout SurfaceOutputStandard o) {
 			float shore = IN.uv_MainTex.y;
 			float foam = Foam(shore, IN.worldPos.xz, _MainTex);
@@ -43,7 +54,7 @@
 			waves *= 1 - shore;
 
 			float4 c = saturate(_Color + max(foam, waves));
-			o.Albedo = c.rgb;
+			o.Albedo = c.rgb * IN.visibility;
 			o.Metallic = _Metallic;
 			o.Smoothness = _Glossiness;
 			o.Alpha = c.a;
