@@ -57,6 +57,7 @@
      <None Include="Assets\Shaders\WaterShoreShader.shader" />
      <None Include="Assets\Shaders\RiverShader.shader" />
      <None Include="Assets\Shaders\EstuariesShader.shader" />
+     <None Include="Assets\Shaders\FeatureShader.shader" />
  <Reference Include="UnityEditor.Advertisements">
  <HintPath>D:/dev/Unity/Editor/Data/UnityExtensions/Unity/Advertisements/Editor/UnityEditor.Advertisements.dll</HintPath>
  </Reference>
