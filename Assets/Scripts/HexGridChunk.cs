@@ -635,7 +635,7 @@ public class HexGridChunk : MonoBehaviour {
 		indices.x = indices.y = indices.z = cell.Index;
 		water.AddTriangleCellData (indices, weights1);
 
-		if (direction <= HexDirection.SE) {
+		if (direction <= HexDirection.SE && neighbor != null) {
 			Vector3 bridge = HexMetrics.GetWaterBridge (direction);
 			Vector3 e1 = c1 + bridge;
 			Vector3 e2 = c2 + bridge;
