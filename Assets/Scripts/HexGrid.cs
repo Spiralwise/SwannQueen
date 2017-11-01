@@ -96,7 +96,10 @@ public class HexGrid : MonoBehaviour {
 		}
 		if ((x != cellCountX || y != cellCountY) && !CreateMap (x, y))
 			return;
-		
+
+		bool originalImmediateMode = cellShaderData.ImmediateMode;
+		cellShaderData.ImmediateMode = true;
+
 		for (int c = 0; c < cells.Length; c++)
 			cells [c].Load (reader, header);
 		for (int c = 0; c < chunks.Length; c++)
@@ -107,6 +110,8 @@ public class HexGrid : MonoBehaviour {
 			for (int i = 0; i < unitCount; i++)
 				HexUnit.Load (reader, this);
 		}
+
+		cellShaderData.ImmediateMode = originalImmediateMode;
 	}
 
 	public void ShowGrid (bool visible) {
