@@ -159,6 +159,7 @@ public class HexGrid : MonoBehaviour {
 		localCell.Index = i;
 		localCell.coordinates = HexCoordinates.FromOffsetCoordinates (x, y);
 		localCell.ShaderData = cellShaderData;
+		localCell.Explorable = x > 0 && y > 0 && x < cellCountX - 1 && y < cellCountY - 1;
 		localCell.transform.position = position;
 
 		Text localLabel = Instantiate<Text> (hexLabelPrefab);
@@ -340,7 +341,9 @@ public class HexGrid : MonoBehaviour {
 			visibleCells.Add (current);
 			for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++) {
 				HexCell neighbor = current.GetNeighbor (d);
-				if (neighbor == null || neighbor.SearchPhase > searchFrontierPhase)
+				if (neighbor == null 
+					|| neighbor.SearchPhase > searchFrontierPhase 
+					|| !neighbor.Explorable)
 					continue;
 
 				int distance = current.Distance + 1;

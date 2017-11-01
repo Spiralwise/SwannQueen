@@ -11,6 +11,7 @@ public class HexCell : MonoBehaviour {
 	public RectTransform uiRect;
 
 	int visibility;
+	bool explored;
 	int elevation = int.MinValue;
 	int urbanLevel, farmLevel, plantLevel;
 	int specialIndex;
@@ -95,13 +96,22 @@ public class HexCell : MonoBehaviour {
 	}
 
 	public bool IsExplored {
+		get {
+			return explored && Explorable;
+		}
+		private set {
+			explored = value;
+		}
+	}
+
+	public bool Explorable {
 		get;
-		private set;
+		set;
 	}
 
 	public bool IsVisible {
 		get {
-			return visibility > 0;
+			return visibility > 0 && Explorable;
 		}
 	}
 
