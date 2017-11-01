@@ -7,10 +7,16 @@ public class HexCellShaderData : MonoBehaviour {
 
 	Texture2D cellTexture;
 	Color32[] cellTextureData;
+	bool needsVisibilityReset;
 
 	List<HexCell> transitioningCells = new List<HexCell>();
 
 	public bool ImmediateMode {
+		get;
+		set;
+	}
+
+	public HexGrid Grid {
 		get;
 		set;
 	}
@@ -52,7 +58,16 @@ public class HexCellShaderData : MonoBehaviour {
 		enabled = true;
 	}
 
+	public void ViewElevationChanged () {
+		needsVisibilityReset = true;
+		enabled = true;
+	}
+
 	void LateUpdate () {
+		if (needsVisibilityReset) {
+			needsVisibilityReset = false;
+			Grid.ResetVisibility ();
+		}
 		int delta = (int)(Time.deltaTime * transitionSpeed);
 		if (delta == 0)
 			delta = 1;

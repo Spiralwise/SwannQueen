@@ -152,9 +152,18 @@ public class HexCell : MonoBehaviour {
 		set {
 			if (elevation == value)
 				return;
+			int originalViewElevation = ViewElevation;
 			elevation = value;
+			if (ViewElevation != originalViewElevation)
+				ShaderData.ViewElevationChanged ();
 			RefreshPosition ();
 			Refresh ();
+		}
+	}
+
+	public int ViewElevation {
+		get {
+			return elevation >= waterLevel ? elevation : waterLevel;
 		}
 	}
 
@@ -321,7 +330,10 @@ public class HexCell : MonoBehaviour {
 		set {
 			if (waterLevel == value)
 				return;
+			int originalViewElevation = ViewElevation;
 			waterLevel = value;
+			if (ViewElevation != originalViewElevation)
+				ShaderData.ViewElevationChanged ();
 			ValidateRivers ();
 			Refresh ();
 		}
@@ -510,5 +522,12 @@ public class HexCell : MonoBehaviour {
 		for (int i = 0; i < roads.Length; i++)
 			if (roads [i] && GetElevationDifference ((HexDirection)i) > 1)
 				SetRoad (i, false);
+	}
+
+	public void ResetVisibility () {
+		if (visibility > 0) {
+			visibility = 0;
+			ShaderData.RefreshVisibility (this);
+		}
 	}
 }
